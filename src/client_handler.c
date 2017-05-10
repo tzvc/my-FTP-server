@@ -5,11 +5,10 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Wed May 10 14:48:11 2017 theo champion
+** Last update Wed May 10 19:22:04 2017 theo champion
 */
 
 #include "header.h"
-#include "protocol_ref.h"
 
 static char	*recv_cmd(int ctrl_fd)
 {
@@ -37,8 +36,8 @@ static void	parse_cmd(char *cmd, t_handle *hdl)
   int		i;
   int		h;
   static char	*names[] = {"USER", "PASS", "CWD", "CDUP", "QUIT",
-			    "DELE", "PWD", "PASV", "PORT", "HELP",
-			    "NOOP", "RETR", "STOR", "LIST"};
+			    "PORT", "PASV", "STOR", "RETR", "LIST",
+			    "DELE", "PWD", "HELP", "NOOP"};
 
   i = 0;
   hdl->cmd_nb = -1;
@@ -57,36 +56,34 @@ static void	parse_cmd(char *cmd, t_handle *hdl)
 
 static void	exec_cmd(t_handle *hdl)
 {
-  cmd_ptr	funcs[] = {cmd_user, cmd_pass, cmd_cwd, cmd_cdup, cmd_quit};
+  cmd_ptr	funcs[] = {cmd_user, cmd_pass, cmd_cwd, cmd_cdup, cmd_quit,
+			   cmd_port, cmd_pasv};
 
   if (hdl->cmd_nb >= 0)
     funcs[hdl->cmd_nb](hdl);
   else
-    hdl->rep_code = 0;
+    set_rep(hdl, 500, "Unknown command.");
 }
 
-static void	send_reply_sequence(t_handle *hdl, int rep_code)
+static void	send_reply_sequence(t_handle *hdl)
 {
-  int		i;
   char		*rep_msg;
 
-  i = 0;
-  while (g_pairs[i].code != rep_code)
-    i++;
-  rep_msg = malloc(sizeof(char) * (6 + strlen(g_pairs[i].text)));
-  if (rep_code == 0)
-    sprintf(rep_msg, "xxx %s\r\n", g_pairs[i].text);
-  else
-    sprintf(rep_msg, "%d %s\r\n", g_pairs[i].code, g_pairs[i].text);
-  write(hdl->ctrl_fd, rep_msg, strlen(rep_msg));
-  free(rep_msg);
+  if ((rep_msg = malloc(sizeof(char) * (7 + strlen(hdl->rep_text)))))
+    {
+      sprintf(rep_msg, "%d %s\r\n", hdl->rep_code, hdl->rep_text);
+      write(hdl->ctrl_fd, rep_msg, strlen(rep_msg));
+      free(rep_msg);
+    }
+  free(hdl->rep_text);
 }
 
 void		handle_client(t_handle *hdl)
 {
   char		*cmd;
 
-  send_reply_sequence(hdl, 220);
+  set_rep(hdl, 220, "Welcome, don't break anything pls");
+  send_reply_sequence(hdl);
   hdl->login_status = 0;
   hdl->quit = false;
   while (!hdl->quit)
@@ -94,7 +91,7 @@ void		handle_client(t_handle *hdl)
       cmd = recv_cmd(hdl->ctrl_fd);
       parse_cmd(cmd, hdl);
       exec_cmd(hdl);
-      send_reply_sequence(hdl, hdl->rep_code);
+      send_reply_sequence(hdl);
       free(cmd);
     }
   free(hdl->path);

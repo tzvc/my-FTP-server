@@ -5,13 +5,14 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 14:16:44 2017 theo champion
-** Last update Wed May 10 11:58:41 2017 theo champion
+** Last update Wed May 10 17:54:29 2017 theo champion
 */
 
 #ifndef HEADER_H_
 #define HEADER_H_
 
 #include <sys/socket.h>
+#include <sys/types.h>
 #include <arpa/inet.h>
 
 #include <stdbool.h>
@@ -30,26 +31,24 @@
 #define LF '\n'
 #define USER "Anonymous"
 
-typedef struct	s_pair
-{
-  int		code;
-  char		*text;
-}		t_pair;
-
 typedef struct	s_handle
 {
   int		ctrl_fd;
+  int		data_fd;
   char		*path;
   int		cmd_nb;
   char		*cmd_arg;
   char		*cmd_rep;
   int		rep_code;
+  char		*rep_text;
   int		login_status;
   bool		quit;
 }		t_handle;
 
 typedef void (*cmd_ptr)(t_handle *);
 
+//MAIN.C
+int	create_socket(struct sockaddr_in *sock, int port);
 //CLIENT_HANDLER.C
 void	handle_client(t_handle *hdl);
 //LOGIN.C
@@ -58,5 +57,9 @@ void	cmd_pass(t_handle *hdl);
 void	cmd_cwd(t_handle *hdl);
 void	cmd_cdup(t_handle *hdl);
 void	cmd_quit(t_handle *hdl);
-
+//TRANSFER.C
+void	cmd_port(t_handle *hdl);
+void	cmd_pasv(t_handle *hdl);
+//UTILS.C
+void	set_rep(t_handle *hdl, int code, char *text);
 #endif /* !HEADER_H_ */
