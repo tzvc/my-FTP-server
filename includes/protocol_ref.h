@@ -5,30 +5,11 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 21:08:42 2017 theo champion
-** Last update Wed May 10 14:43:31 2017 theo champion
+** Last update Wed May 10 14:49:38 2017 theo champion
 */
 
 #ifndef PROTOCOL_REF_H
 #define PROTOCOL_REF_H
-
-#define T120 "Service ready in nnn minutes."
-#define T125 "Data connection already open; transfer starting."
-#define T150 "File status okay; about to open data connection."
-#define T200 "Command okay."
-#define T214 "Help message.On how to use the server or the \
-meaning of a particularnon-standard command.  This reply is \
-useful only to the human user."
-#define T220 "Service ready for new user."
-#define T221 "Service closing control connection.\nLogged out if appropriate."
-#define T226 "Closing data connection.\nRequested file action \
-successful (for example, file transfer or file abort)."
-#define T227 "Entering Passive Mode (h1,h2,h3,h4,p1,p2)."
-#define T230 "User logged in, proceed."
-#define T250 "Requested file action okay, completed."
-#define T257 "\"PATHNAME\" created."
-#define T331 "User name okay, need password."
-#define T332 "Need account for login."
-#define XXX "Error (RFC compliantx)"
 
 static t_pair	g_pairs[] = {
   {110, "Restart marker replay."},

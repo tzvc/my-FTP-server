@@ -5,12 +5,12 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 13:57:08 2017 theo champion
-** Last update Wed May 10 11:59:10 2017 theo champion
+** Last update Wed May 10 15:34:30 2017 theo champion
 */
 
 #include "header.h"
 
-static int	init_listening_socket(struct sockaddr_in *server)
+static int	init_listening_socket(struct sockaddr_in *server, int port)
 {
   int		socket_fd;
   int		enable;
@@ -22,7 +22,7 @@ static int	init_listening_socket(struct sockaddr_in *server)
     return (-1);
   server->sin_family = AF_INET;
   server->sin_addr.s_addr = INADDR_ANY;
-  server->sin_port = htons( 8888 );
+  server->sin_port = htons(port);
   if (bind(socket_fd,(struct sockaddr *)server , sizeof(*server)) < 0)
     return (-1);
   return (socket_fd);
@@ -51,17 +51,25 @@ static void		handle_new_connections(int socket_fd, char *home)
   }
 }
 
-int main(void)
+int			main(int argc, char **argv)
 {
-  int socket_fd;
-  struct sockaddr_in server;
+  int			socket_fd;
+  struct sockaddr_in	server;
+  int			port;
 
-  if ((socket_fd = init_listening_socket(&server)) == -1)
+  if (argc < 3)
+    fprintf(stderr, "Usage : ./server port path\n");
+  else if (access(argv[1], F_OK) == -1)
+    fprintf(stderr, "Invalid path %s\n", argv[1]);
+  else if ((port = (int)strtol(argv[2], NULL, 10)) <= 0)
+    fprintf(stderr, "Invalid port number\n");
+  else if ((socket_fd = init_listening_socket(&server, port)) == -1)
+    fprintf(stderr, "Unable to create socket: %s\n", strerror(errno));
+  else
     {
-      fprintf(stderr, "Unable to create socket: %s\n", strerror(errno));
-      return (1);
+      listen(socket_fd, 3);
+      handle_new_connections(socket_fd, argv[1]);
+      return (0);
     }
-  listen(socket_fd, 3);
-  handle_new_connections(socket_fd, "/");
-  return 0;
+  return (1);
 }

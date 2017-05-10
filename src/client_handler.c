@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Wed May 10 11:59:36 2017 theo champion
+** Last update Wed May 10 14:48:11 2017 theo champion
 */
 
 #include "header.h"
@@ -69,19 +69,15 @@ static void	send_reply_sequence(t_handle *hdl, int rep_code)
 {
   int		i;
   char		*rep_msg;
-  t_pair	rep[] = {{120, T120}, {125, T125}, {150, T150},
-			 {200, T200}, {214, T214}, {220, T220},
-	                 {221, T221}, {226, T226}, {227, T227},
-			 {230, T230}, {250, T250}, {257, T257},
-			 {331, T331}, {332, T332}, {0, XXX}};
+
   i = 0;
-  while (rep[i].code != rep_code)
+  while (g_pairs[i].code != rep_code)
     i++;
-  rep_msg = malloc(sizeof(char) * (6 + strlen(rep[i].text)));
+  rep_msg = malloc(sizeof(char) * (6 + strlen(g_pairs[i].text)));
   if (rep_code == 0)
-    sprintf(rep_msg, "xxx %s\r\n", rep[i].text);
+    sprintf(rep_msg, "xxx %s\r\n", g_pairs[i].text);
   else
-    sprintf(rep_msg, "%d %s\r\n", rep[i].code, rep[i].text);
+    sprintf(rep_msg, "%d %s\r\n", g_pairs[i].code, g_pairs[i].text);
   write(hdl->ctrl_fd, rep_msg, strlen(rep_msg));
   free(rep_msg);
 }
