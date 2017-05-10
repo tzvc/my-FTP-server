@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 14:16:44 2017 theo champion
-** Last update Wed May 10 17:54:29 2017 theo champion
+** Last update Wed May 10 20:48:38 2017 theo champion
 */
 
 #ifndef HEADER_H_
@@ -24,6 +24,7 @@
 #include <sys/ioctl.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <stdarg.h>
 
 #define CMD_SIZE 1024
 #define SP ' '
@@ -51,15 +52,17 @@ typedef void (*cmd_ptr)(t_handle *);
 int	create_socket(struct sockaddr_in *sock, int port);
 //CLIENT_HANDLER.C
 void	handle_client(t_handle *hdl);
-//LOGIN.C
+//USER.C
 void	cmd_user(t_handle *hdl);
 void	cmd_pass(t_handle *hdl);
+void	cmd_quit(t_handle *hdl);
+//FILE_NAVIGATION.C
 void	cmd_cwd(t_handle *hdl);
 void	cmd_cdup(t_handle *hdl);
-void	cmd_quit(t_handle *hdl);
+void	cmd_pwd(t_handle *hdl);
 //TRANSFER.C
 void	cmd_port(t_handle *hdl);
 void	cmd_pasv(t_handle *hdl);
 //UTILS.C
-void	set_rep(t_handle *hdl, int code, char *text);
+void	set_rep(t_handle *hdl, int code, const char *fmt, ...);
 #endif /* !HEADER_H_ */

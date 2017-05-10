@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 15:40:21 2017 theo champion
-** Last update Wed May 10 19:19:48 2017 theo champion
+** Last update Wed May 10 21:34:11 2017 theo champion
 */
 
 #include "header.h"
@@ -29,7 +29,6 @@ void			cmd_port(t_handle *hdl)
 void			cmd_pasv(t_handle *hdl)
 {
   struct sockaddr_in	data_sock;
-  char			rep_msg[100];
   uint16_t		port;
   socklen_t		len;
 
@@ -37,15 +36,13 @@ void			cmd_pasv(t_handle *hdl)
     {
       getsockname(hdl->data_fd, (struct sockaddr *)&data_sock, &len);
       port = ntohs(data_sock.sin_port);
-      sprintf(rep_msg, "Entering Passive Mode (%d,%d,%d,%d,%d,%d).",
+      set_rep(hdl, 227, "Entering Passive Mode (%d,%d,%d,%d,%d,%d).",
 	      (int)(data_sock.sin_addr.s_addr & 0xFF),
 	      (int)((data_sock.sin_addr.s_addr & 0xFF00) >> 8),
 	      (int)((data_sock.sin_addr.s_addr & 0xFF0000) >> 16),
 	      (int)((data_sock.sin_addr.s_addr & 0xFF000000) >> 24),
-	      port / 256, port % 256);
-      printf("%s  %d\n", rep_msg, port);
-      set_rep(hdl, 227, rep_msg);
-      hdl->rep_text = strdup(rep_msg);
+	      (int)(port / 256), (int)(port % 256));
+      listen(hdl->data_fd, 5);
     }
   else
     set_rep(hdl, 500, "Canno open data connection");
