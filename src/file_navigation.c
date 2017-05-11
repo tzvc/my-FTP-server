@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 20:34:44 2017 theo champion
-** Last update Wed May 10 21:10:42 2017 theo champion
+** Last update Thu May 11 13:18:25 2017 theo champion
 */
 
 #include "header.h"
@@ -40,7 +40,7 @@ void	cmd_cdup(t_handle *hdl)
   if (hdl->path[i + 1])
     {
       hdl->path[(i > 0 ? i : i + 1)] = 0;
-      hdl->path = realloc(hdl->path, (i > 0 ? i : i + 1));
+      hdl->path = realloc(hdl->path, sizeof(char) * (strlen(hdl->path) + 1));
       set_rep(hdl, 200, "Directory successfully changed.");
     }
   else

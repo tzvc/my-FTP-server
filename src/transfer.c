@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 15:40:21 2017 theo champion
-** Last update Wed May 10 21:34:11 2017 theo champion
+** Last update Thu May 11 14:02:28 2017 theo champion
 */
 
 #include "header.h"
@@ -43,6 +43,7 @@ void			cmd_pasv(t_handle *hdl)
 	      (int)((data_sock.sin_addr.s_addr & 0xFF000000) >> 24),
 	      (int)(port / 256), (int)(port % 256));
       listen(hdl->data_fd, 5);
+      printf("data fd %d\n", hdl->data_fd);
     }
   else
     set_rep(hdl, 500, "Canno open data connection");

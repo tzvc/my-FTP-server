@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Wed May 10 20:48:01 2017 theo champion
+** Last update Thu May 11 14:00:09 2017 theo champion
 */
 
 #include "header.h"
@@ -57,7 +57,7 @@ static void	parse_cmd(char *cmd, t_handle *hdl)
 static void	exec_cmd(t_handle *hdl)
 {
   cmd_ptr	funcs[] = {cmd_user, cmd_pass, cmd_quit, cmd_cwd, cmd_cdup,
-			   cmd_pwd, cmd_port, cmd_pasv};
+			   cmd_pwd, cmd_port, cmd_pasv, cmd_stor, cmd_retr};
 
   if (hdl->cmd_nb >= 0)
     funcs[hdl->cmd_nb](hdl);
@@ -82,6 +82,7 @@ void		handle_client(t_handle *hdl)
 {
   char		*cmd;
 
+  hdl->data_fd = -1;
   set_rep(hdl, 220, "Welcome, don't break anything pls");
   send_reply_sequence(hdl);
   hdl->login_status = 0;

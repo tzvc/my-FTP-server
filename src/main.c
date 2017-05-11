@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 13:57:08 2017 theo champion
-** Last update Wed May 10 18:06:13 2017 theo champion
+** Last update Thu May 11 11:21:58 2017 theo champion
 */
 
 #include "header.h"
@@ -59,16 +59,16 @@ int			main(int argc, char **argv)
 
   if (argc < 3)
     fprintf(stderr, "Usage : ./server port path\n");
-  else if (access(argv[1], F_OK) == -1)
-    fprintf(stderr, "Invalid path %s\n", argv[1]);
-  else if ((port = (int)strtol(argv[2], NULL, 10)) <= 0)
+  else if ((port = (int)strtol(argv[1], NULL, 10)) <= 0)
     fprintf(stderr, "Invalid port number\n");
+  else if (access(argv[2], F_OK) == -1)
+    fprintf(stderr, "Invalid path %s\n", argv[2]);
   else if ((socket_fd = create_socket(&ctrl_sock, port)) == -1)
     fprintf(stderr, "Unable to create socket: %s\n", strerror(errno));
   else
     {
       listen(socket_fd, 3);
-      handle_new_connections(socket_fd, argv[1]);
+      handle_new_connections(socket_fd, argv[2]);
       return (0);
     }
   return (1);

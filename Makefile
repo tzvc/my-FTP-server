@@ -5,7 +5,7 @@
 ## Login   <theo.champion@epitech.eu>
 ## 
 ## Started on  Wed Apr 12 11:17:49 2017 theo champion
-## Last update Wed May 10 20:35:36 2017 theo champion
+## Last update Thu May 11 12:58:19 2017 theo champion
 ##
 
 CC	= gcc
@@ -24,6 +24,7 @@ SRCS	= $(SRCDIR)/main.c		\
           $(SRCDIR)/utils.c		\
           $(SRCDIR)/user.c		\
           $(SRCDIR)/file_navigation.c	\
+          $(SRCDIR)/file_action.c	\
           $(SRCDIR)/transfer.c		\
 
 OBJS	= $(SRCS:.c=.o)

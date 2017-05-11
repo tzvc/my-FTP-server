@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 14:16:44 2017 theo champion
-** Last update Wed May 10 20:48:38 2017 theo champion
+** Last update Thu May 11 14:01:35 2017 theo champion
 */
 
 #ifndef HEADER_H_
@@ -27,6 +27,7 @@
 #include <stdarg.h>
 
 #define CMD_SIZE 1024
+#define BLOCK_SIZE 1024
 #define SP ' '
 #define CR '\r'
 #define LF '\n'
@@ -60,6 +61,9 @@ void	cmd_quit(t_handle *hdl);
 void	cmd_cwd(t_handle *hdl);
 void	cmd_cdup(t_handle *hdl);
 void	cmd_pwd(t_handle *hdl);
+//FILE_ACTION.C
+void	cmd_stor(t_handle *hdl);
+void	cmd_retr(t_handle *hdl);
 //TRANSFER.C
 void	cmd_port(t_handle *hdl);
 void	cmd_pasv(t_handle *hdl);
