@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Thu May 11 14:00:09 2017 theo champion
+** Last update Fri May 12 17:51:11 2017 theo champion
 */
 
 #include "header.h"
@@ -47,7 +47,10 @@ static void	parse_cmd(char *cmd, t_handle *hdl)
   h = 0;
   while (names[h] && strncmp(cmd, names[h], i) != 0)
     h++;
-  printf("found %s\n", names[h]);
+  if (names[h])
+    log_msg(INFO, "Executing command \"%s\"", names[h]);
+  else
+    log_msg(ERROR, "Unknown command \"%s\"", cmd);
   if (!names[h])
     return;
   hdl->cmd_nb = h;
@@ -62,29 +65,37 @@ static void	exec_cmd(t_handle *hdl)
   if (hdl->cmd_nb >= 0)
     funcs[hdl->cmd_nb](hdl);
   else
-    set_rep(hdl, 500, "Unknown command.");
+    reply(hdl, 200, "Unknown command.");
 }
 
-static void	send_reply_sequence(t_handle *hdl)
+bool		reply(t_handle *hdl, int code, const char *fmt, ...)
 {
-  char		*rep_msg;
+  char		*text;
+  char		*reply;
+  va_list	ap;
+  size_t	len;
 
-  if ((rep_msg = malloc(sizeof(char) * (7 + strlen(hdl->rep_text)))))
-    {
-      sprintf(rep_msg, "%d %s\r\n", hdl->rep_code, hdl->rep_text);
-      write(hdl->ctrl_fd, rep_msg, strlen(rep_msg));
-      free(rep_msg);
-    }
-  free(hdl->rep_text);
+  va_start(ap, fmt);
+  len = vsnprintf(NULL, 0, fmt, ap);
+  va_start(ap, fmt);
+  if ((text = malloc(sizeof(char) * len + 1)) == NULL)
+    return (false);
+  vsprintf(text, fmt, ap);
+  if ((reply = malloc(sizeof(char) * strlen(text) + 7)) == NULL)
+    return (false);
+  sprintf(reply, "%d %s\r\n", code, text);
+  write(hdl->ctrl_fd, reply, strlen(reply));
+  free(text);
+  free(reply);
+  va_end(ap);
+  return (code >= 300 ? false : true);
 }
 
 void		handle_client(t_handle *hdl)
 {
   char		*cmd;
 
-  hdl->data_fd = -1;
-  set_rep(hdl, 220, "Welcome, don't break anything pls");
-  send_reply_sequence(hdl);
+  reply(hdl, 220, "Welcome, don't break anything pls");
   hdl->login_status = 0;
   hdl->quit = false;
   while (!hdl->quit)
@@ -92,7 +103,6 @@ void		handle_client(t_handle *hdl)
       cmd = recv_cmd(hdl->ctrl_fd);
       parse_cmd(cmd, hdl);
       exec_cmd(hdl);
-      send_reply_sequence(hdl);
       free(cmd);
     }
   free(hdl->path);

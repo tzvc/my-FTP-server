@@ -5,22 +5,23 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 16:24:37 2017 theo champion
-** Last update Wed May 10 21:32:14 2017 theo champion
+** Last update Fri May 12 16:14:58 2017 theo champion
 */
 
 #include "header.h"
 
-void		set_rep(t_handle *hdl, int code, const char *fmt, ...)
+void		log_msg(int mode, const char *fmt, ...)
 {
   va_list	ap;
-  size_t	len;
 
   va_start(ap, fmt);
-  len = vsnprintf(NULL, 0, fmt, ap);
-  va_start(ap, fmt);
-  if ((hdl->rep_text = malloc(sizeof(char) * len + 1)) == NULL)
-    return;
-  vsprintf(hdl->rep_text, fmt, ap);
-  hdl->rep_code = code;
+  if (mode == INFO)
+    fprintf(stderr, "\033[95m[INFO] ");
+  else if (mode == ERROR)
+    fprintf(stderr, "\033[91m[ERROR] ");
+  else
+    fprintf(stderr, "\033[93m[DEBUG] ");
+  vfprintf(stderr, fmt, ap);
+  fprintf(stderr, "\n\033[0m");
   va_end(ap);
 }

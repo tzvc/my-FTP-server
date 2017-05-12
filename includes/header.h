@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 14:16:44 2017 theo champion
-** Last update Thu May 11 14:01:35 2017 theo champion
+** Last update Fri May 12 17:57:54 2017 theo champion
 */
 
 #ifndef HEADER_H_
@@ -32,41 +32,48 @@
 #define CR '\r'
 #define LF '\n'
 #define USER "Anonymous"
+#define INFO 0
+#define ERROR 1
+#define DEBUG 2
 
 typedef struct	s_handle
 {
   int		ctrl_fd;
   int		data_fd;
+  int		pasv_fd;
   char		*path;
   int		cmd_nb;
   char		*cmd_arg;
-  char		*cmd_rep;
-  int		rep_code;
-  char		*rep_text;
   int		login_status;
   bool		quit;
 }		t_handle;
 
-typedef void (*cmd_ptr)(t_handle *);
+typedef bool (*cmd_ptr)(t_handle *);
 
 //MAIN.C
-int	create_socket(struct sockaddr_in *sock, int port);
+int	create_s_socket(struct sockaddr_in *sock, int port);
+int	create_c_socket(struct sockaddr_in *sock, uint32_t ip, int port);
 //CLIENT_HANDLER.C
+bool	reply(t_handle *hdl, int code, const char *fmt, ...);
 void	handle_client(t_handle *hdl);
 //USER.C
-void	cmd_user(t_handle *hdl);
-void	cmd_pass(t_handle *hdl);
-void	cmd_quit(t_handle *hdl);
+bool	cmd_user(t_handle *hdl);
+bool	cmd_pass(t_handle *hdl);
+bool	cmd_quit(t_handle *hdl);
 //FILE_NAVIGATION.C
-void	cmd_cwd(t_handle *hdl);
-void	cmd_cdup(t_handle *hdl);
-void	cmd_pwd(t_handle *hdl);
+bool	cmd_cwd(t_handle *hdl);
+bool	cmd_cdup(t_handle *hdl);
+bool	cmd_pwd(t_handle *hdl);
 //FILE_ACTION.C
-void	cmd_stor(t_handle *hdl);
-void	cmd_retr(t_handle *hdl);
+bool	cmd_stor(t_handle *hdl);
+bool	cmd_retr(t_handle *hdl);
 //TRANSFER.C
-void	cmd_port(t_handle *hdl);
-void	cmd_pasv(t_handle *hdl);
+bool	cmd_port(t_handle *hdl);
+bool	cmd_pasv(t_handle *hdl);
 //UTILS.C
-void	set_rep(t_handle *hdl, int code, const char *fmt, ...);
+void	log_msg(int mode, const char *fmt, ...);
+//SOCKET.C
+int	create_s_socket(struct sockaddr_in *sock, int port);
+int	create_c_socket(struct sockaddr_in *sock, uint32_t ip, int port);
+int	accept_connection(int socket_fd);
 #endif /* !HEADER_H_ */

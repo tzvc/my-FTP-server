@@ -5,16 +5,15 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 20:34:44 2017 theo champion
-** Last update Thu May 11 13:18:25 2017 theo champion
+** Last update Fri May 12 15:48:49 2017 theo champion
 */
 
 #include "header.h"
 
-void	cmd_cwd(t_handle *hdl)
+bool	cmd_cwd(t_handle *hdl)
 {
   char	*new_path;
   //Verif the user is logged in
-  printf("path: %s\n", hdl->path);
   new_path = NULL;
   if (access(hdl->cmd_arg, F_OK) != -1)
     new_path = realpath(hdl->cmd_arg, NULL);
@@ -22,18 +21,15 @@ void	cmd_cwd(t_handle *hdl)
     {
       free(hdl->path);
       hdl->path = new_path;
-      set_rep(hdl, 250, "Directory successfully changed.");
+      return (reply(hdl, 250, "Directory successfully changed."));
     }
-  else
-    set_rep(hdl, 550, "Failed to change directory.");
-  printf("new path: %s\n", hdl->path);
+  return (reply(hdl, 550, "Failed to change directory."));
 }
 
-void	cmd_cdup(t_handle *hdl)
+bool	cmd_cdup(t_handle *hdl)
 {
   int	i;
   //Verif the user is logged in
-  printf("cdup path: %s\n", hdl->path);
   i = strlen(hdl->path) - 1;
   while (hdl->path[i] && hdl->path[i] != '/')
     i--;
@@ -41,14 +37,13 @@ void	cmd_cdup(t_handle *hdl)
     {
       hdl->path[(i > 0 ? i : i + 1)] = 0;
       hdl->path = realloc(hdl->path, sizeof(char) * (strlen(hdl->path) + 1));
-      set_rep(hdl, 200, "Directory successfully changed.");
+      return (reply(hdl, 200, "Directory successfully changed."));
     }
-  else
-    set_rep(hdl, 550, "Failed to change directory.");
-  printf("new path: %s\n", hdl->path);
+  log_msg(INFO, "New path set to \"%s\"\n", hdl->path);
+  return (reply(hdl, 550, "Failed to change directory."));
 }
 
-void	cmd_pwd(t_handle *hdl)
+bool	cmd_pwd(t_handle *hdl)
 {
-  set_rep(hdl, 257, "\"%s\"", hdl->path);
+  return (reply(hdl, 257, "\"%s\"", hdl->path));
 }
