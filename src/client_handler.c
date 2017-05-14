@@ -5,10 +5,26 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Fri May 12 17:51:11 2017 theo champion
+** Last update Sun May 14 19:59:42 2017 theo champion
 */
 
 #include "header.h"
+
+const char	*g_cmd_list[] =
+  {
+    "USER", "PASS", "QUIT", "CWD", "CDUP",
+   "PWD", "PORT", "PASV", "STOR", "RETR",
+   "LIST", "DELE","HELP", "NOOP"
+  };
+
+cmd_ptr	g_funcs[] =
+  {
+    cmd_user, cmd_pass, cmd_quit, cmd_cwd, cmd_cdup,
+    cmd_pwd, cmd_port, cmd_pasv, cmd_stor, cmd_retr,
+    cmd_list, cmd_dele
+  };
+
+
 
 static char	*recv_cmd(int ctrl_fd)
 {
@@ -35,35 +51,34 @@ static void	parse_cmd(char *cmd, t_handle *hdl)
 {
   int		i;
   int		h;
-  static char	*names[] = {"USER", "PASS", "QUIT", "CWD", "CDUP",
-			    "PWD", "PORT", "PASV", "STOR", "RETR", "LIST",
-			    "DELE", "PWD", "HELP", "NOOP"};
 
   i = 0;
   hdl->cmd_nb = -1;
   hdl->cmd_arg = NULL;
+  log_msg(DEBUG, "raw cmd\"%s\"", cmd);
   while (cmd[i] && cmd[i] != SP)
     i++;
   h = 0;
-  while (names[h] && strncmp(cmd, names[h], i) != 0)
+  while (g_cmd_list[h] && strncmp(cmd, g_cmd_list[h], i) != 0)
     h++;
-  if (names[h])
-    log_msg(INFO, "Executing command \"%s\"", names[h]);
+  if (g_cmd_list[h])
+    log_msg(INFO, "Executing command \"%s\"", g_cmd_list[h]);
   else
     log_msg(ERROR, "Unknown command \"%s\"", cmd);
-  if (!names[h])
+  if (!g_cmd_list[h])
     return;
   hdl->cmd_nb = h;
-  hdl->cmd_arg = &cmd[++i];
+  while (cmd[i] == SP)
+    i++;
+  if (!cmd[i])
+    return;
+  hdl->cmd_arg = &cmd[i];
 }
 
 static void	exec_cmd(t_handle *hdl)
 {
-  cmd_ptr	funcs[] = {cmd_user, cmd_pass, cmd_quit, cmd_cwd, cmd_cdup,
-			   cmd_pwd, cmd_port, cmd_pasv, cmd_stor, cmd_retr};
-
   if (hdl->cmd_nb >= 0)
-    funcs[hdl->cmd_nb](hdl);
+    g_funcs[hdl->cmd_nb](hdl);
   else
     reply(hdl, 200, "Unknown command.");
 }

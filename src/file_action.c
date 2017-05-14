@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Thu May 11 11:20:45 2017 theo champion
-** Last update Fri May 12 19:20:12 2017 theo champion
+** Last update Sat May 13 15:59:28 2017 theo champion
 */
 
 #include "header.h"
@@ -67,5 +67,26 @@ bool		cmd_retr(t_handle *hdl)
   reply(hdl, 226, "Closing data connection.");
   close(hdl->data_fd);
   hdl->data_fd = -1;
+  return (true);
+}
+
+bool	cmd_dele(t_handle *hdl)
+{
+  char	*fullpath;
+
+  if (!hdl->cmd_arg)
+    return (reply(hdl, 501, "Syntax error in parameters or arguments."));
+  if (!(fullpath = malloc(sizeof(char) *
+                          strlen(hdl->path) + strlen(hdl->cmd_arg) + 2)))
+    return (false);
+  sprintf(fullpath, "%s/%s", hdl->path, hdl->cmd_arg);
+  log_msg(INFO, "File to access is %s", fullpath);
+  if (access(fullpath, F_OK) == -1)
+    reply(hdl, 550, "Requested action not taken. File unavailable.");
+  else if (remove(fullpath) == -1)
+    reply(hdl, 500, "Internal error: remove: %s", strerror(errno));
+  else
+    reply(hdl, 250, "Requested file action okay, completed.");
+  free(fullpath);
   return (true);
 }

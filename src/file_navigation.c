@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 20:34:44 2017 theo champion
-** Last update Fri May 12 15:48:49 2017 theo champion
+** Last update Sat May 13 13:05:09 2017 theo champion
 */
 
 #include "header.h"
@@ -46,4 +46,32 @@ bool	cmd_cdup(t_handle *hdl)
 bool	cmd_pwd(t_handle *hdl)
 {
   return (reply(hdl, 257, "\"%s\"", hdl->path));
+}
+
+bool	cmd_list(t_handle *hdl)
+{
+  DIR	*dir;
+  struct dirent	*ep;
+
+  if (!(dir = open_dir(hdl->path, hdl->cmd_arg)))
+    return (reply(hdl, 500, "Cannot open dir."));
+  if (hdl->data_fd > 0)
+    reply(hdl, 125, "Data connection already open; transfer starting.");
+  else
+    {
+      reply(hdl, 150, "File status okay; about to open data connection.");
+      if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr*)NULL, NULL)) <= 0)
+        return (reply(hdl, 425, "Can't open data connection."));
+    }
+  log_msg(DEBUG, "Directory opened correctly");
+  while ((ep = readdir(dir)) != NULL)
+    {
+      write(hdl->data_fd, ep->d_name, strlen(ep->d_name));
+      write(hdl->data_fd, "\n", 1);
+    }
+  closedir(dir);
+  reply(hdl, 226, "Closing data connection.");
+  close(hdl->data_fd);
+  hdl->data_fd = -1;
+  return (true);
 }

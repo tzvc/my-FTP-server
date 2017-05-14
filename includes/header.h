@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 14:16:44 2017 theo champion
-** Last update Fri May 12 19:08:40 2017 theo champion
+** Last update Sun May 14 19:58:33 2017 theo champion
 */
 
 #ifndef HEADER_H_
@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <stdarg.h>
+#include <dirent.h>
 
 #define CMD_SIZE 1024
 #define BLOCK_SIZE 1024
@@ -64,15 +65,18 @@ bool	cmd_quit(t_handle *hdl);
 bool	cmd_cwd(t_handle *hdl);
 bool	cmd_cdup(t_handle *hdl);
 bool	cmd_pwd(t_handle *hdl);
+bool	cmd_list(t_handle *hdl);
 //FILE_ACTION.C
 bool	cmd_stor(t_handle *hdl);
 bool	cmd_retr(t_handle *hdl);
+bool	cmd_dele(t_handle *hdl);
 //TRANSFER.C
 bool	cmd_port(t_handle *hdl);
 bool	cmd_pasv(t_handle *hdl);
 //UTILS.C
 void	log_msg(int mode, const char *fmt, ...);
 FILE	*open_file(char *path, char *filename, char *mode);
+DIR	*open_dir(char *path, char *dirname);
 //SOCKET.C
 int	create_s_socket(struct sockaddr_in *sock, int port);
 int	create_c_socket(struct sockaddr_in *sock, uint32_t ip, int port);

@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 16:24:37 2017 theo champion
-** Last update Fri May 12 19:08:59 2017 theo champion
+** Last update Sat May 13 15:53:48 2017 theo champion
 */
 
 #include "header.h"
@@ -39,4 +39,23 @@ FILE	*open_file(char *path, char *filename, char *mode)
   file = fopen(fullpath, mode);
   free(fullpath);
   return (file);
+}
+
+DIR	*open_dir(char *path, char *dirname)
+{
+  char	*fullpath;
+  DIR	*dir;
+
+  if (!(fullpath = malloc(sizeof(char) *
+			  strlen(path)
+			  + (dirname ? strlen(dirname) : 1) + 2)))
+    return (NULL);
+  if (dirname)
+    sprintf(fullpath, "%s/%s", path, dirname);
+  else
+    sprintf(fullpath, "%s/.", path);
+  log_msg(INFO, "Dir to open is %s", fullpath);
+  dir = opendir(fullpath);
+  free(fullpath);
+  return (dir);
 }
