@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 14:16:44 2017 theo champion
-** Last update Mon May 15 13:44:13 2017 theo champion
+** Last update Mon May 15 21:29:47 2017 theo champion
 */
 
 #ifndef HEADER_H_
@@ -78,6 +78,7 @@ bool	cmd_dele(t_handle *hdl);
 //TRANSFER.C
 bool	cmd_port(t_handle *hdl);
 bool	cmd_pasv(t_handle *hdl);
+bool	cmd_type(t_handle *hdl);
 //UTILS.C
 void	log_msg(int mode, const char *fmt, ...);
 FILE	*open_file(char *path, char *filename, char *mode);

@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Mon May 15 17:01:42 2017 theo champion
+** Last update Mon May 15 21:29:32 2017 theo champion
 */
 
 #include "header.h"
@@ -14,14 +14,14 @@ const char	*g_cmd_list[] =
   {
     "USER", "PASS", "QUIT", "CWD", "CDUP",
    "PWD", "PORT", "PASV", "STOR", "RETR",
-   "LIST", "DELE","HELP", "NOOP"
+    "LIST", "DELE","HELP", "NOOP", "TYPE"
   };
 
 cmd_ptr	g_funcs[] =
   {
     cmd_user, cmd_pass, cmd_quit, cmd_cwd, cmd_cdup,
     cmd_pwd, cmd_port, cmd_pasv, cmd_stor, cmd_retr,
-    cmd_list, cmd_dele, cmd_help, cmd_noop
+    cmd_list, cmd_dele, cmd_help, cmd_noop, cmd_type
   };
 
 static char	*recv_cmd(int ctrl_fd)
@@ -76,7 +76,7 @@ static void	parse_cmd(char *cmd, t_handle *hdl)
 static bool	exec_cmd(t_handle *hdl)
 {
   if (hdl->cmd_nb < 0)
-    return (reply(hdl, 502, "Command not implemented."));
+    return (reply(hdl, 500, "Unknown command."));
   else if (hdl->cmd_nb >= 0 && hdl->cmd_nb <= 2)
     return (g_funcs[hdl->cmd_nb](hdl));
   else

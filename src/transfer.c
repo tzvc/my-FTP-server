@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 15:40:21 2017 theo champion
-** Last update Mon May 15 14:05:18 2017 theo champion
+** Last update Mon May 15 21:27:10 2017 theo champion
 */
 
 #include "header.h"
@@ -47,4 +47,11 @@ bool			cmd_pasv(t_handle *hdl)
 		(int)((data_sock.sin_addr.s_addr & 0xFF0000) >> 16),
 		(int)((data_sock.sin_addr.s_addr & 0xFF000000) >> 24),
 		(int)(port / 256), (int)(port % 256)));
+}
+
+bool	cmd_type(t_handle *hdl)
+{
+  if (hdl->cmd_arg[0] == 'I')
+    return (reply(hdl, 200, "Switching to Binary mode."));
+  return (reply(hdl, 504, "Command not implemented for that parameter."));
 }
