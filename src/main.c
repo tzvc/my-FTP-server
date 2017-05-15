@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 13:57:08 2017 theo champion
-** Last update Mon May 15 14:35:04 2017 theo champion
+** Last update Mon May 15 16:55:53 2017 theo champion
 */
 
 #include "header.h"
@@ -18,18 +18,17 @@ static void		handle_new_connections(int socket_fd, char *home)
   socklen_t		cli_addr_size;
 
   log_msg(INFO, "Waiting for incoming connections...");
-  log_msg(ERROR, "Waiting for incoming connections...");
   hdl.path = realpath(home, NULL);
   cli_addr_size = sizeof(client);
   while ((hdl.ctrl_fd = accept(socket_fd,
-			       (struct sockaddr *)&client,
-			       (socklen_t*)&cli_addr_size)) != -1)
+                               (struct sockaddr *)&client,
+                               (socklen_t*)&cli_addr_size)) != -1)
   {
-    log_msg(INFO, "Connection accepted");
+    log_msg(INFO, "Connection accepted [%s]", inet_ntoa(client.sin_addr));
     if ((pid = fork()) == 0)
       {
-	handle_client(&hdl);
-	break;
+        handle_client(&hdl);
+        break;
       }
   }
 }
@@ -41,7 +40,7 @@ int			main(int argc, char **argv)
   int			port;
 
   if (argc < 3)
-    fprintf(stderr, "Usage : ./%s port path\n", argv[0]);
+    printf("Usage : %s port path\n", argv[0]);
   else if ((port = (int)strtol(argv[1], NULL, 10)) <= 0)
     fprintf(stderr, "Invalid port number\n");
   else if (access(argv[2], F_OK) == -1)

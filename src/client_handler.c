@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Mon May 15 14:09:15 2017 theo champion
+** Last update Mon May 15 17:01:42 2017 theo champion
 */
 
 #include "header.h"
@@ -54,7 +54,6 @@ static void	parse_cmd(char *cmd, t_handle *hdl)
   i = 0;
   hdl->cmd_nb = -1;
   hdl->cmd_arg = NULL;
-  log_msg(DEBUG, "raw cmd\"%s\"", cmd);
   while (cmd[i] && cmd[i] != SP)
     i++;
   h = 0;
@@ -78,7 +77,7 @@ static bool	exec_cmd(t_handle *hdl)
 {
   if (hdl->cmd_nb < 0)
     return (reply(hdl, 502, "Command not implemented."));
-  else if (hdl->cmd_nb >= 0 && hdl->cmd_nb <= 1)
+  else if (hdl->cmd_nb >= 0 && hdl->cmd_nb <= 2)
     return (g_funcs[hdl->cmd_nb](hdl));
   else
     {
@@ -115,7 +114,7 @@ void		handle_client(t_handle *hdl)
 {
   char		*cmd;
 
-  reply(hdl, 220, "Welcome, don't break anything pls");
+  reply(hdl, 220, "Welcome user, don't break anything pls.");
   hdl->login_status = 0;
   hdl->quit = false;
   while (!hdl->quit)

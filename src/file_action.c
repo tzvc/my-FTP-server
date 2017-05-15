@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Thu May 11 11:20:45 2017 theo champion
-** Last update Mon May 15 14:04:29 2017 theo champion
+** Last update Mon May 15 18:34:22 2017 theo champion
 */
 
 #include "header.h"
@@ -18,9 +18,9 @@ bool	cmd_stor(t_handle *hdl)
 
   if (!hdl->cmd_arg)
     return (reply(hdl, 501, "Syntax error in parameters or arguments."));
-  if ((file = open_file(hdl->path, hdl->cmd_arg, "w+")) == NULL)
+  if ((file = open_file(hdl->path, hdl->cmd_arg, "ab")) == NULL)
     return (reply(hdl, 550, "Failed to open file."));
-  log_msg(INFO, "File to retrieve is %s", hdl->cmd_arg);
+  log_msg(INFO, "File to receive is \"%s\"", hdl->cmd_arg);
   if (hdl->data_fd > 0)
     reply(hdl, 125, "Data connection already open; transfer starting.");
   else
@@ -31,7 +31,7 @@ bool	cmd_stor(t_handle *hdl)
     }
   while ((nread = read(hdl->data_fd, buf, BLOCK_SIZE)) > 0)
     if (fwrite(buf, sizeof(char), nread, file) != BLOCK_SIZE)
-      log_msg(ERROR, "write: %s", strerror(errno));
+      return (reply(hdl, 426, "Connection closed; transfer aborted."));
   reply(hdl, 226, "Closing data connection.");
   close(hdl->data_fd);
   hdl->data_fd = -1;
@@ -46,7 +46,7 @@ bool		cmd_retr(t_handle *hdl)
 
   if (!hdl->cmd_arg)
     return (reply(hdl, 501, "Syntax error in parameters or arguments."));
-  if ((file = open_file(hdl->path, hdl->cmd_arg, "r")) == NULL)
+  if ((file = open_file(hdl->path, hdl->cmd_arg, "rb")) == NULL)
     return (reply(hdl, 550, "Failed to open file."));
   if (hdl->data_fd > 0)
     reply(hdl, 125, "Data connection already open; transfer starting.");
@@ -56,10 +56,9 @@ bool		cmd_retr(t_handle *hdl)
       if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr*)0, 0)) <= 0)
         return (reply(hdl, 425, "Can't open data connection."));
     }
-  log_msg(DEBUG, "file opened correctly");
   while ((nread = fread(buf, sizeof(char), BLOCK_SIZE, file)) > 0)
     if (write(hdl->data_fd, buf, nread) == -1)
-      log_msg(ERROR, "write: %s", strerror(errno));
+      return (reply(hdl, 426, "Connection closed; transfer aborted."));
   reply(hdl, 226, "Closing data connection.");
   close(hdl->data_fd);
   hdl->data_fd = -1;
@@ -74,7 +73,7 @@ bool	cmd_dele(t_handle *hdl)
     return (reply(hdl, 501, "Syntax error in parameters or arguments."));
   if (!(fullpath = malloc(sizeof(char) *
                           strlen(hdl->path) + strlen(hdl->cmd_arg) + 2)))
-    return (false);
+    return (reply(hdl, 500, "Internal error: malloc: %s", strerror(errno)));
   sprintf(fullpath, "%s/%s", hdl->path, hdl->cmd_arg);
   log_msg(INFO, "File to access is %s", fullpath);
   if (access(fullpath, F_OK) == -1)
