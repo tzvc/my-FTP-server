@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 20:34:44 2017 theo champion
-** Last update Sat May 13 13:05:09 2017 theo champion
+** Last update Mon May 15 14:05:22 2017 theo champion
 */
 
 #include "header.h"
@@ -13,7 +13,7 @@
 bool	cmd_cwd(t_handle *hdl)
 {
   char	*new_path;
-  //Verif the user is logged in
+
   new_path = NULL;
   if (access(hdl->cmd_arg, F_OK) != -1)
     new_path = realpath(hdl->cmd_arg, NULL);
@@ -29,7 +29,7 @@ bool	cmd_cwd(t_handle *hdl)
 bool	cmd_cdup(t_handle *hdl)
 {
   int	i;
-  //Verif the user is logged in
+
   i = strlen(hdl->path) - 1;
   while (hdl->path[i] && hdl->path[i] != '/')
     i--;
@@ -48,9 +48,9 @@ bool	cmd_pwd(t_handle *hdl)
   return (reply(hdl, 257, "\"%s\"", hdl->path));
 }
 
-bool	cmd_list(t_handle *hdl)
+bool		cmd_list(t_handle *hdl)
 {
-  DIR	*dir;
+  DIR		*dir;
   struct dirent	*ep;
 
   if (!(dir = open_dir(hdl->path, hdl->cmd_arg)))

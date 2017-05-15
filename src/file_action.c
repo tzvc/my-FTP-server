@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Thu May 11 11:20:45 2017 theo champion
-** Last update Sat May 13 15:59:28 2017 theo champion
+** Last update Mon May 15 14:04:29 2017 theo champion
 */
 
 #include "header.h"
@@ -26,16 +26,12 @@ bool	cmd_stor(t_handle *hdl)
   else
     {
       reply(hdl, 150, "File status okay; about to open data connection.");
-      if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr*)NULL, NULL)) <= 0)
+      if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr*)0, 0)) <= 0)
         return (reply(hdl, 425, "Can't open data connection."));
     }
-  log_msg(DEBUG, "file opened correctly");
-  while ((nread = read(hdl->data_fd, buf, BLOCK_SIZE)) > 0) {
-    log_msg(DEBUG, "nread = %d", nread);
+  while ((nread = read(hdl->data_fd, buf, BLOCK_SIZE)) > 0)
     if (fwrite(buf, sizeof(char), nread, file) != BLOCK_SIZE)
       log_msg(ERROR, "write: %s", strerror(errno));
-  }
-  log_msg(DEBUG, "nread = %d", nread);
   reply(hdl, 226, "Closing data connection.");
   close(hdl->data_fd);
   hdl->data_fd = -1;
@@ -57,7 +53,7 @@ bool		cmd_retr(t_handle *hdl)
   else
     {
       reply(hdl, 150, "File status okay; about to open data connection.");
-      if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr*)NULL, NULL)) <= 0)
+      if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr*)0, 0)) <= 0)
         return (reply(hdl, 425, "Can't open data connection."));
     }
   log_msg(DEBUG, "file opened correctly");

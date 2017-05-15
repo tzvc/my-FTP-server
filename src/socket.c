@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Fri May 12 12:38:10 2017 theo champion
-** Last update Fri May 12 16:23:27 2017 theo champion
+** Last update Mon May 15 13:31:08 2017 theo champion
 */
 
 #include "header.h"
@@ -45,7 +45,6 @@ int	create_c_socket(struct sockaddr_in *sock, uint32_t ip, int port)
     return (-1);
   return (socket_fd);
 }
-
 
 int			accept_connection(int socket_fd)
 {

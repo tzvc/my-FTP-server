@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 14:16:44 2017 theo champion
-** Last update Sun May 14 19:58:33 2017 theo champion
+** Last update Mon May 15 13:44:13 2017 theo champion
 */
 
 #ifndef HEADER_H_
@@ -36,6 +36,9 @@
 #define INFO 0
 #define ERROR 1
 #define DEBUG 2
+#define HELP "USER\tPASS\tQUIT\tCWD\tCDUP\nPWD\tPORT\tPASV\t\
+STOR\tRETR\nLIST\tDELE\tHELP\tNOOP"
+#define LOGGED 2
 
 typedef struct	s_handle
 {
@@ -61,6 +64,8 @@ void	handle_client(t_handle *hdl);
 bool	cmd_user(t_handle *hdl);
 bool	cmd_pass(t_handle *hdl);
 bool	cmd_quit(t_handle *hdl);
+bool	cmd_help(t_handle *hdl);
+bool	cmd_noop(t_handle *hdl);
 //FILE_NAVIGATION.C
 bool	cmd_cwd(t_handle *hdl);
 bool	cmd_cdup(t_handle *hdl);

@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 15:40:21 2017 theo champion
-** Last update Fri May 12 18:00:29 2017 theo champion
+** Last update Mon May 15 14:05:18 2017 theo champion
 */
 
 #include "header.h"
@@ -19,12 +19,13 @@ bool			cmd_port(t_handle *hdl)
 
   sscanf(hdl->cmd_arg, "%d,%d,%d,%d,%d,%d",
          &ip[0], &ip[1], &ip[2], &ip[3], &port[0], &port[1]);
-  log_msg(DEBUG, "Parsed infos %d,%d,%d,%d,%d,%d", ip[0], ip[1], ip[2], ip[3], port[0], port[1]);
+  log_msg(DEBUG, "Parsed infos %d,%d,%d,%d,%d,%d",
+	  ip[0], ip[1], ip[2], ip[3], port[0], port[1]);
   sprintf(ip_text, "%d.%d.%d.%d", ip[0], ip[1], ip[2], ip[3]);
   if ((hdl->data_fd = create_c_socket(&data_sock, inet_addr(ip_text),
 				      (port[0] * 256 + port[1]))) == -1)
     return (reply(hdl, 500, "Error: %s", strerror(errno)));
-  return (reply(hdl, 200, "The requested action has been successfully completed."));
+  return (reply(hdl, 200, "PORT command successful. Consider using PASV."));
 }
 
 bool			cmd_pasv(t_handle *hdl)

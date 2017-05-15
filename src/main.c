@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 13:57:08 2017 theo champion
-** Last update Fri May 12 12:43:12 2017 theo champion
+** Last update Mon May 15 14:35:04 2017 theo champion
 */
 
 #include "header.h"
@@ -41,7 +41,7 @@ int			main(int argc, char **argv)
   int			port;
 
   if (argc < 3)
-    fprintf(stderr, "Usage : ./server port path\n");
+    fprintf(stderr, "Usage : ./%s port path\n", argv[0]);
   else if ((port = (int)strtol(argv[1], NULL, 10)) <= 0)
     fprintf(stderr, "Invalid port number\n");
   else if (access(argv[2], F_OK) == -1)

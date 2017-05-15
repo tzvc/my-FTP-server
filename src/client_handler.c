@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Sun May 14 19:59:42 2017 theo champion
+** Last update Mon May 15 14:09:15 2017 theo champion
 */
 
 #include "header.h"
@@ -21,10 +21,8 @@ cmd_ptr	g_funcs[] =
   {
     cmd_user, cmd_pass, cmd_quit, cmd_cwd, cmd_cdup,
     cmd_pwd, cmd_port, cmd_pasv, cmd_stor, cmd_retr,
-    cmd_list, cmd_dele
+    cmd_list, cmd_dele, cmd_help, cmd_noop
   };
-
-
 
 static char	*recv_cmd(int ctrl_fd)
 {
@@ -32,7 +30,8 @@ static char	*recv_cmd(int ctrl_fd)
   int		i;
 
   i = 0;
-  cmd = malloc(sizeof(char) * CMD_SIZE);
+  if ((cmd = malloc(sizeof(char) * CMD_SIZE)) == NULL)
+    return (NULL);
   while (42)
     {
       if (read(ctrl_fd, &cmd[i], 1) != 0)
@@ -75,12 +74,18 @@ static void	parse_cmd(char *cmd, t_handle *hdl)
   hdl->cmd_arg = &cmd[i];
 }
 
-static void	exec_cmd(t_handle *hdl)
+static bool	exec_cmd(t_handle *hdl)
 {
-  if (hdl->cmd_nb >= 0)
-    g_funcs[hdl->cmd_nb](hdl);
+  if (hdl->cmd_nb < 0)
+    return (reply(hdl, 502, "Command not implemented."));
+  else if (hdl->cmd_nb >= 0 && hdl->cmd_nb <= 1)
+    return (g_funcs[hdl->cmd_nb](hdl));
   else
-    reply(hdl, 200, "Unknown command.");
+    {
+      if (hdl->login_status != LOGGED)
+        return (reply(hdl, 530, "Please login with USER and PASS."));
+      return (g_funcs[hdl->cmd_nb](hdl));
+    }
 }
 
 bool		reply(t_handle *hdl, int code, const char *fmt, ...)
