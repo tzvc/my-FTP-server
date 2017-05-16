@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 20:34:44 2017 theo champion
-** Last update Mon May 15 14:05:22 2017 theo champion
+** Last update Tue May 16 08:56:13 2017 theo champion
 */
 
 #include "header.h"
@@ -60,7 +60,7 @@ bool		cmd_list(t_handle *hdl)
   else
     {
       reply(hdl, 150, "File status okay; about to open data connection.");
-      if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr*)NULL, NULL)) <= 0)
+      if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr*)0, 0)) <= 0)
         return (reply(hdl, 425, "Can't open data connection."));
     }
   log_msg(DEBUG, "Directory opened correctly");
