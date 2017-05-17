@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Thu May 11 11:20:45 2017 theo champion
-** Last update Wed May 17 12:01:42 2017 theo champion
+** Last update Wed May 17 23:15:29 2017 theo champion
 */
 
 #include "header.h"
@@ -26,7 +26,7 @@ bool		cmd_stor(t_handle *hdl)
   else
     {
       reply(hdl, 150, "File status okay; about to open data connection.");
-      if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr*)0, 0)) <= 0)
+      if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr *)0, 0)) <= 0)
         return (reply(hdl, 425, "Can't open data connection."));
     }
   while ((nread = read(hdl->data_fd, buf, BLOCK_SIZE)) > 0)
@@ -54,7 +54,7 @@ bool		cmd_retr(t_handle *hdl)
   else
     {
       reply(hdl, 150, "File status okay; about to open data connection.");
-      if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr*)0, 0)) <= 0)
+      if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr *)0, 0)) <= 0)
         return (reply(hdl, 425, "Can't open data connection."));
     }
   while ((nread = fread(buf, sizeof(char), BLOCK_SIZE, file)) > 0)

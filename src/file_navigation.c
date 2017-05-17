@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 20:34:44 2017 theo champion
-** Last update Tue May 16 08:56:13 2017 theo champion
+** Last update Thu May 18 00:35:17 2017 theo champion
 */
 
 #include "header.h"
@@ -23,7 +23,7 @@ bool	cmd_cwd(t_handle *hdl)
       hdl->path = new_path;
       return (reply(hdl, 250, "Directory successfully changed."));
     }
-  return (reply(hdl, 550, "Failed to change directory."));
+  return (reply(hdl, 550, "error: %s", strerror(errno)));
 }
 
 bool	cmd_cdup(t_handle *hdl)
@@ -60,7 +60,7 @@ bool		cmd_list(t_handle *hdl)
   else
     {
       reply(hdl, 150, "File status okay; about to open data connection.");
-      if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr*)0, 0)) <= 0)
+      if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr *)0, 0)) <= 0)
         return (reply(hdl, 425, "Can't open data connection."));
     }
   log_msg(DEBUG, "Directory opened correctly");

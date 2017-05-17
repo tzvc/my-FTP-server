@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Wed May 17 11:59:45 2017 theo champion
+** Last update Thu May 18 00:35:10 2017 theo champion
 */
 
 #include "header.h"
@@ -116,6 +116,7 @@ void		handle_client(t_handle *hdl)
 
   reply(hdl, 220, "Welcome user, don't break anything pls.");
   hdl->login_status = 0;
+  hdl->data_fd = -1;
   hdl->quit = false;
   while (!hdl->quit)
     {

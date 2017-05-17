@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 14:16:44 2017 theo champion
-** Last update Wed May 17 12:23:09 2017 theo champion
+** Last update Wed May 17 23:27:34 2017 theo champion
 */
 
 #ifndef HEADER_H_
@@ -46,6 +46,7 @@ typedef struct	s_handle
   int		ctrl_fd;
   int		data_fd;
   int		pasv_fd;
+  unsigned long	local_ip;
   char		*path;
   int		cmd_nb;
   char		*cmd_arg;
@@ -79,4 +80,6 @@ FILE	*open_file(char *path, char *filename, char *mode);
 DIR	*open_dir(char *path, char *dirname);
 int	create_s_socket(struct sockaddr_in *sock, int port);
 int	create_c_socket(struct sockaddr_in *sock, uint32_t ip, int port);
+int	accept_con(int socket);
+
 #endif /* !HEADER_H_ */

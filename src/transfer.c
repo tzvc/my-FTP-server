@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 15:40:21 2017 theo champion
-** Last update Wed May 17 12:23:42 2017 theo champion
+** Last update Wed May 17 22:22:13 2017 theo champion
 */
 
 #include "header.h"
@@ -42,10 +42,10 @@ bool			cmd_pasv(t_handle *hdl)
   port = ntohs(data_sock.sin_port);
   log_msg(DEBUG, "Data line port: %d", port);
   return (reply(hdl, 227, "Entering Passive Mode (%d,%d,%d,%d,%d,%d).",
-                (int)(data_sock.sin_addr.s_addr & 0xFF),
-                (int)((data_sock.sin_addr.s_addr & 0xFF00) >> 8),
-                (int)((data_sock.sin_addr.s_addr & 0xFF0000) >> 16),
-                (int)((data_sock.sin_addr.s_addr & 0xFF000000) >> 24),
+                (int)(hdl->local_ip & 0xFF),
+                (int)((hdl->local_ip & 0xFF00) >> 8),
+                (int)((hdl->local_ip & 0xFF0000) >> 16),
+                (int)((hdl->local_ip & 0xFF000000) >> 24),
                 (int)(port / 256), (int)(port % 256)));
 }
 
