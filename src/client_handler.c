@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Mon May 15 21:29:32 2017 theo champion
+** Last update Wed May 17 11:59:45 2017 theo champion
 */
 
 #include "header.h"
@@ -13,7 +13,7 @@
 const char	*g_cmd_list[] =
   {
     "USER", "PASS", "QUIT", "CWD", "CDUP",
-   "PWD", "PORT", "PASV", "STOR", "RETR",
+    "PWD", "PORT", "PASV", "STOR", "RETR",
     "LIST", "DELE","HELP", "NOOP", "TYPE"
   };
 

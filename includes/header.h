@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 14:16:44 2017 theo champion
-** Last update Mon May 15 21:29:47 2017 theo champion
+** Last update Wed May 17 12:18:32 2017 theo champion
 */
 
 #ifndef HEADER_H_
@@ -14,7 +14,6 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
-
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -26,6 +25,7 @@
 #include <limits.h>
 #include <stdarg.h>
 #include <dirent.h>
+#include <signal.h>
 
 #define CMD_SIZE 1024
 #define BLOCK_SIZE 1024
@@ -39,6 +39,7 @@
 #define HELP "USER\tPASS\tQUIT\tCWD\tCDUP\nPWD\tPORT\tPASV\t\
 STOR\tRETR\nLIST\tDELE\tHELP\tNOOP"
 #define LOGGED 2
+#define MAX_CON 5
 
 typedef struct	s_handle
 {
@@ -54,37 +55,28 @@ typedef struct	s_handle
 
 typedef bool (*cmd_ptr)(t_handle *);
 
-//MAIN.C
 int	create_s_socket(struct sockaddr_in *sock, int port);
 int	create_c_socket(struct sockaddr_in *sock, uint32_t ip, int port);
-//CLIENT_HANDLER.C
 bool	reply(t_handle *hdl, int code, const char *fmt, ...);
 void	handle_client(t_handle *hdl);
-//USER.C
 bool	cmd_user(t_handle *hdl);
 bool	cmd_pass(t_handle *hdl);
 bool	cmd_quit(t_handle *hdl);
 bool	cmd_help(t_handle *hdl);
 bool	cmd_noop(t_handle *hdl);
-//FILE_NAVIGATION.C
 bool	cmd_cwd(t_handle *hdl);
 bool	cmd_cdup(t_handle *hdl);
 bool	cmd_pwd(t_handle *hdl);
 bool	cmd_list(t_handle *hdl);
-//FILE_ACTION.C
 bool	cmd_stor(t_handle *hdl);
 bool	cmd_retr(t_handle *hdl);
 bool	cmd_dele(t_handle *hdl);
-//TRANSFER.C
 bool	cmd_port(t_handle *hdl);
 bool	cmd_pasv(t_handle *hdl);
 bool	cmd_type(t_handle *hdl);
-//UTILS.C
 void	log_msg(int mode, const char *fmt, ...);
 FILE	*open_file(char *path, char *filename, char *mode);
 DIR	*open_dir(char *path, char *dirname);
-//SOCKET.C
 int	create_s_socket(struct sockaddr_in *sock, int port);
 int	create_c_socket(struct sockaddr_in *sock, uint32_t ip, int port);
-int	accept_connection(int socket_fd);
 #endif /* !HEADER_H_ */

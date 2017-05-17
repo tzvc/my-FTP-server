@@ -5,12 +5,12 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Thu May 11 11:20:45 2017 theo champion
-** Last update Mon May 15 18:34:22 2017 theo champion
+** Last update Wed May 17 12:01:42 2017 theo champion
 */
 
 #include "header.h"
 
-bool	cmd_stor(t_handle *hdl)
+bool		cmd_stor(t_handle *hdl)
 {
   FILE		*file;
   int		nread;
@@ -34,6 +34,7 @@ bool	cmd_stor(t_handle *hdl)
       return (reply(hdl, 426, "Connection closed; transfer aborted."));
   reply(hdl, 226, "Closing data connection.");
   close(hdl->data_fd);
+  fclose(file);
   hdl->data_fd = -1;
   return (true);
 }
@@ -61,6 +62,7 @@ bool		cmd_retr(t_handle *hdl)
       return (reply(hdl, 426, "Connection closed; transfer aborted."));
   reply(hdl, 226, "Closing data connection.");
   close(hdl->data_fd);
+  fclose(file);
   hdl->data_fd = -1;
   return (true);
 }

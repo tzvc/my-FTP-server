@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 16:24:37 2017 theo champion
-** Last update Sat May 13 15:53:48 2017 theo champion
+** Last update Wed May 17 12:12:16 2017 theo champion
 */
 
 #include "header.h"
@@ -35,7 +35,7 @@ FILE	*open_file(char *path, char *filename, char *mode)
                           strlen(path) + strlen(filename) + 2)))
     return (NULL);
   sprintf(fullpath, "%s/%s", path, filename);
-  log_msg(INFO, "File to retrieve is %s", fullpath);
+  log_msg(INFO, "File to open is %s", fullpath);
   file = fopen(fullpath, mode);
   free(fullpath);
   return (file);
@@ -47,8 +47,8 @@ DIR	*open_dir(char *path, char *dirname)
   DIR	*dir;
 
   if (!(fullpath = malloc(sizeof(char) *
-			  strlen(path)
-			  + (dirname ? strlen(dirname) : 1) + 2)))
+                          strlen(path)
+                          + (dirname ? strlen(dirname) : 1) + 2)))
     return (NULL);
   if (dirname)
     sprintf(fullpath, "%s/%s", path, dirname);

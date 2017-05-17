@@ -1,11 +1,11 @@
 ##
-## Makefile for strace in /home/rootkid/rendu/psu/PSU_2016_strace
+## Makefile for myftp in /home/rootkid/rendu/psu/PSU_2016_myftp
 ## 
 ## Made by theo champion
 ## Login   <theo.champion@epitech.eu>
 ## 
-## Started on  Wed Apr 12 11:17:49 2017 theo champion
-## Last update Fri May 12 12:42:20 2017 theo champion
+## Started on  Wed May 17 11:35:56 2017 theo champion
+## Last update Wed May 17 11:36:23 2017 theo champion
 ##
 
 CC	= gcc
@@ -14,7 +14,7 @@ RM	= rm -f
 
 SRCDIR	= ./src
 
-CFLAGS	+= -W -Wall -Wextra -g3
+CFLAGS	+= -W -Wall -Wextra -Werror
 CFLAGS	+= -I./includes
 
 NAME	= server

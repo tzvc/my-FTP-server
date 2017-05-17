@@ -5,10 +5,18 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 13:57:08 2017 theo champion
-** Last update Mon May 15 16:55:53 2017 theo champion
+** Last update Wed May 17 12:18:43 2017 theo champion
 */
 
 #include "header.h"
+
+static volatile bool	g_run_server;
+
+void	signal_handler(int signal)
+{
+  (void)signal;
+  g_run_server = false;
+}
 
 static void		handle_new_connections(int socket_fd, char *home)
 {
@@ -20,17 +28,19 @@ static void		handle_new_connections(int socket_fd, char *home)
   log_msg(INFO, "Waiting for incoming connections...");
   hdl.path = realpath(home, NULL);
   cli_addr_size = sizeof(client);
-  while ((hdl.ctrl_fd = accept(socket_fd,
-                               (struct sockaddr *)&client,
-                               (socklen_t*)&cli_addr_size)) != -1)
-  {
-    log_msg(INFO, "Connection accepted [%s]", inet_ntoa(client.sin_addr));
-    if ((pid = fork()) == 0)
-      {
-        handle_client(&hdl);
-        break;
-      }
-  }
+  while (g_run_server
+         && (hdl.ctrl_fd = accept(socket_fd,
+                                  (struct sockaddr *)&client,
+                                  (socklen_t*)&cli_addr_size)) != -1)
+    {
+      log_msg(INFO, "Connection accepted [%s]", inet_ntoa(client.sin_addr));
+      if ((pid = fork()) == 0)
+        {
+          handle_client(&hdl);
+          log_msg(INFO, "Client [%s] exited", inet_ntoa(client.sin_addr));
+          break;
+        }
+    }
 }
 
 int			main(int argc, char **argv)
@@ -49,7 +59,9 @@ int			main(int argc, char **argv)
     fprintf(stderr, "Unable to create socket: %s\n", strerror(errno));
   else
     {
-      listen(socket_fd, 3);
+      signal(SIGINT, signal_handler);
+      g_run_server = true;
+      listen(socket_fd, MAX_CON);
       handle_new_connections(socket_fd, argv[2]);
       return (0);
     }
