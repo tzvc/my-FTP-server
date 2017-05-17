@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 14:16:44 2017 theo champion
-** Last update Wed May 17 12:18:32 2017 theo champion
+** Last update Wed May 17 12:23:09 2017 theo champion
 */
 
 #ifndef HEADER_H_
@@ -39,7 +39,7 @@
 #define HELP "USER\tPASS\tQUIT\tCWD\tCDUP\nPWD\tPORT\tPASV\t\
 STOR\tRETR\nLIST\tDELE\tHELP\tNOOP"
 #define LOGGED 2
-#define MAX_CON 5
+#define QUEUE_SIZE 5
 
 typedef struct	s_handle
 {

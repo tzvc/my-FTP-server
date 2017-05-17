@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 13:57:08 2017 theo champion
-** Last update Wed May 17 12:18:43 2017 theo champion
+** Last update Wed May 17 12:23:22 2017 theo champion
 */
 
 #include "header.h"
@@ -61,7 +61,7 @@ int			main(int argc, char **argv)
     {
       signal(SIGINT, signal_handler);
       g_run_server = true;
-      listen(socket_fd, MAX_CON);
+      listen(socket_fd, QUEUE_SIZE);
       handle_new_connections(socket_fd, argv[2]);
       return (0);
     }

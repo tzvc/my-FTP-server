@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 15:40:21 2017 theo champion
-** Last update Wed May 17 12:18:20 2017 theo champion
+** Last update Wed May 17 12:23:42 2017 theo champion
 */
 
 #include "header.h"
@@ -37,7 +37,7 @@ bool			cmd_pasv(t_handle *hdl)
   len = sizeof(data_sock);
   if ((hdl->pasv_fd = create_s_socket(&data_sock, 0)) == -1)
     return (reply(hdl, 500, "Internal error"));
-  listen(hdl->pasv_fd, MAX_CON);
+  listen(hdl->pasv_fd, QUEUE_SIZE);
   getsockname(hdl->pasv_fd, (struct sockaddr *)&data_sock, &len);
   port = ntohs(data_sock.sin_port);
   log_msg(DEBUG, "Data line port: %d", port);
