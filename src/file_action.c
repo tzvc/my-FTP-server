@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Thu May 11 11:20:45 2017 theo champion
-** Last update Wed May 17 23:15:29 2017 theo champion
+** Last update Thu May 18 12:38:46 2017 theo champion
 */
 
 #include "header.h"
@@ -13,12 +13,12 @@
 bool		cmd_stor(t_handle *hdl)
 {
   FILE		*file;
-  int		nread;
+  size_t	nread;
   char		buf[BLOCK_SIZE];
 
   if (!hdl->cmd_arg)
     return (reply(hdl, 501, "Syntax error in parameters or arguments."));
-  if ((file = open_file(hdl->path, hdl->cmd_arg, "ab")) == NULL)
+  if ((file = open_file(hdl->path, hdl->cmd_arg, "wb")) == NULL)
     return (reply(hdl, 550, "Failed to open file."));
   log_msg(INFO, "File to receive is \"%s\"", hdl->cmd_arg);
   if (hdl->data_fd > 0)
@@ -30,7 +30,7 @@ bool		cmd_stor(t_handle *hdl)
         return (reply(hdl, 425, "Can't open data connection."));
     }
   while ((nread = read(hdl->data_fd, buf, BLOCK_SIZE)) > 0)
-    if (fwrite(buf, sizeof(char), nread, file) != BLOCK_SIZE)
+    if (fwrite(buf, sizeof(char), nread, file) < nread)
       return (reply(hdl, 426, "Connection closed; transfer aborted."));
   reply(hdl, 226, "Closing data connection.");
   close(hdl->data_fd);
@@ -42,7 +42,7 @@ bool		cmd_stor(t_handle *hdl)
 bool		cmd_retr(t_handle *hdl)
 {
   FILE		*file;
-  int		nread;
+  size_t	nread;
   char		buf[BLOCK_SIZE];
 
   if (!hdl->cmd_arg)
