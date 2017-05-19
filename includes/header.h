@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 14:16:44 2017 theo champion
-** Last update Fri May 19 17:00:59 2017 theo champion
+** Last update Fri May 19 20:38:04 2017 theo champion
 */
 
 #ifndef HEADER_H_
@@ -41,6 +41,7 @@
 STOR\tRETR\nLIST\tDELE\tHELP\tNOOP"
 #define LOGGED 2
 #define QUEUE_SIZE 5
+#define LS_CMD "/bin/ls -l"
 
 typedef struct	s_handle
 {
@@ -80,7 +81,7 @@ bool	cmd_type(t_handle *hdl);
 void	log_msg(int mode, const char *fmt, ...);
 char	*gen_fullpath(t_handle *hdl, char *path);
 FILE	*open_file(t_handle *hdl, char *filename, char *mode);
-DIR	*open_dir(t_handle *hdl, char *dirname);
+FILE	*open_cmd_stream(t_handle *hdl, char *arg);
 int	create_s_socket(struct sockaddr_in *sock, int port);
 int	create_c_socket(struct sockaddr_in *sock, uint32_t ip, int port);
 int	accept_con(int socket);

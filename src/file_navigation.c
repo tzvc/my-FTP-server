@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 20:34:44 2017 theo champion
-** Last update Fri May 19 19:27:09 2017 theo champion
+** Last update Fri May 19 21:02:39 2017 theo champion
 */
 
 #include "header.h"
@@ -45,11 +45,13 @@ bool		cmd_pwd(t_handle *hdl)
 
 bool		cmd_list(t_handle *hdl)
 {
-  DIR		*dir;
-  struct dirent	*ep;
+  FILE		*stream;
+  char		*line;
+  size_t	len;
+  ssize_t	nread;
 
-  if (!(dir = open_dir(hdl, (hdl->cmd_arg ? hdl->cmd_arg : "."))))
-    return (reply(hdl, 500, "Cannot open dir."));
+  if (!(stream = open_cmd_stream(hdl, (hdl->cmd_arg ? hdl->cmd_arg : "."))))
+    return (reply(hdl, 450, "Requested file action not taken."));
   if (hdl->data_fd > 0)
     reply(hdl, 125, "Data connection already open; transfer starting.");
   else
@@ -58,13 +60,12 @@ bool		cmd_list(t_handle *hdl)
       if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr *)0, 0)) <= 0)
         return (reply(hdl, 425, "Can't open data connection."));
     }
-  log_msg(DEBUG, "Directory opened correctly");
-  while ((ep = readdir(dir)) != NULL)
-    {
-      write(hdl->data_fd, ep->d_name, strlen(ep->d_name));
-      write(hdl->data_fd, "\n", 1);
-    }
-  closedir(dir);
+  len = 0;
+  line = NULL;
+  while ((nread = getline(&line, &len, stream)) != -1)
+    write(hdl->data_fd, line, nread);
+  free(line);
+  pclose(stream);
   reply(hdl, 226, "Closing data connection.");
   close(hdl->data_fd);
   hdl->data_fd = -1;

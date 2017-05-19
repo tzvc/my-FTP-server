@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 16:24:37 2017 theo champion
-** Last update Fri May 19 18:30:53 2017 theo champion
+** Last update Fri May 19 20:50:46 2017 theo champion
 */
 
 #include "header.h"
@@ -39,10 +39,10 @@ char	*gen_fullpath(t_handle *hdl, char *path)
   sprintf(fullpath, "%s/%s", hdl->wd, path);
   log_msg(INFO, "fullpath is \"%s\"", fullpath);
   resolved = realpath(fullpath, NULL);
-  log_msg(INFO, "resolved is \"%s\"", resolved);
   free(fullpath);
   if (!resolved)
     return (NULL);
+  log_msg(INFO, "resolved is \"%s\"", resolved);
   if (strlen(resolved) < strlen(hdl->home))
     {
       free(resolved);
@@ -50,7 +50,6 @@ char	*gen_fullpath(t_handle *hdl, char *path)
     }
   else
     return (resolved);
-  return (NULL);
 }
 
 FILE	*open_file(t_handle *hdl, char *filepath, char *mode)
@@ -81,15 +80,21 @@ FILE	*open_file(t_handle *hdl, char *filepath, char *mode)
   return (file);
 }
 
-DIR	*open_dir(t_handle *hdl, char *dirname)
+FILE	*open_cmd_stream(t_handle *hdl, char *arg)
 {
   char	*fullpath;
-  DIR	*dir;
+  char	*fullcmd;
+  FILE	*stream;
 
-  if (!(fullpath = gen_fullpath(hdl, dirname)))
-    return (NULL);
-  log_msg(INFO, "Dir to open is %s", fullpath);
-  dir = opendir(fullpath);
+  stream = NULL;
+  if ((fullpath = gen_fullpath(hdl, arg)) != NULL)
+    {
+      fullcmd = malloc(sizeof(char) * strlen(LS_CMD) + strlen(fullpath) + 2);
+      sprintf(fullcmd, "%s %s", LS_CMD, fullpath);
+      log_msg(INFO, "Running command: \"%s\"", fullcmd);
+      stream = popen(fullcmd, "r");
+    }
   free(fullpath);
-  return (dir);
+  free(fullcmd);
+  return (stream);
 }
