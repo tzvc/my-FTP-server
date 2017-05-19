@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Fri May 19 19:04:28 2017 theo champion
+** Last update Fri May 19 19:46:47 2017 theo champion
 */
 
 #include "header.h"
@@ -47,11 +47,9 @@ static void	recv_and_parse_cmd(t_handle *hdl)
     return;
   free(raw);
   h = 0;
-  while (h < (sizeof(g_cmd_list) / sizeof(g_cmd_list[0])) &&
-         (strcmp(cmd, g_cmd_list[h]) != 0))
-    h++;
-  if (!g_cmd_list[h])
-    return;
+  while (strcmp(cmd, g_cmd_list[h]) != 0)
+    if (++h >= (sizeof(g_cmd_list) / sizeof(g_cmd_list[0])))
+      return;
   hdl->cmd_nb = h;
 }
 
