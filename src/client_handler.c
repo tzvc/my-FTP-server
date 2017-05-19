@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Thu May 18 19:39:10 2017 theo champion
+** Last update Fri May 19 19:04:28 2017 theo champion
 */
 
 #include "header.h"
@@ -30,12 +30,17 @@ static void	recv_and_parse_cmd(t_handle *hdl)
   char		cmd[5];
   size_t	len;
   unsigned int	h;
+  FILE		*input_stream;
 
   len = 0;
   hdl->cmd_nb = -1;
   hdl->cmd_arg = NULL;
-  if (getline(&raw, &len, fdopen(hdl->ctrl_fd, "r")) == -1)
+  raw = NULL;
+  if ((input_stream = fdopen(dup(hdl->ctrl_fd), "r")) == NULL)
     return;
+  if (getline(&raw, &len, input_stream) == -1)
+    return;
+  fclose(input_stream);
   if ((h = sscanf(raw, "%s %ms\r\n", cmd, &hdl->cmd_arg)) == 0)
     free(raw);
   if (h == 0)
@@ -47,12 +52,13 @@ static void	recv_and_parse_cmd(t_handle *hdl)
     h++;
   if (!g_cmd_list[h])
     return;
-  log_msg(INFO, "Executing \"%s\" \"%s\"", g_cmd_list[h], hdl->cmd_arg);
   hdl->cmd_nb = h;
 }
 
 static bool	exec_cmd(t_handle *hdl)
 {
+  log_msg(INFO, "Executing \"%s\" \"%s\"",
+          g_cmd_list[hdl->cmd_nb], hdl->cmd_arg);
   if (hdl->cmd_nb < 0)
     return (reply(hdl, 500, "Unknown command."));
   else if (hdl->cmd_nb >= 0 && hdl->cmd_nb <= 2)
@@ -90,15 +96,19 @@ bool		reply(t_handle *hdl, int code, const char *fmt, ...)
 
 void		handle_client(t_handle *hdl)
 {
-  reply(hdl, 220, "Welcome m8, don't break anything pls.");
   hdl->login_status = 0;
   hdl->data_fd = -1;
   hdl->quit = false;
+  hdl->wd = strdup(hdl->home);
+  reply(hdl, 220, "Welcome m8, don't break anything pls.");
   while (!hdl->quit)
     {
       recv_and_parse_cmd(hdl);
       exec_cmd(hdl);
+      if (hdl->cmd_arg)
+        free(hdl->cmd_arg);
     }
-  free(hdl->path);
+  free(hdl->home);
+  free(hdl->wd);
   close(hdl->ctrl_fd);
 }

@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 13:57:08 2017 theo champion
-** Last update Thu May 18 00:36:41 2017 theo champion
+** Last update Fri May 19 15:18:36 2017 theo champion
 */
 
 #include "header.h"
@@ -31,7 +31,7 @@ static int		handle_new_connections(int port, char *home)
   if ((g_socket_fd = create_s_socket(&l_addr, port)) == -1)
     return (-1);
   listen(g_socket_fd, QUEUE_SIZE);
-  if ((hdl.path = realpath(home, NULL)) == NULL)
+  if ((hdl.home = realpath(home, NULL)) == NULL)
     return (-1);
   while (g_run_server && ((hdl.ctrl_fd = accept_con(g_socket_fd)) != -1))
     {
@@ -46,7 +46,7 @@ static int		handle_new_connections(int port, char *home)
         }
       close(hdl.ctrl_fd);
     }
-  free(hdl.path);
+  free(hdl.home);
   return (0);
 }
 

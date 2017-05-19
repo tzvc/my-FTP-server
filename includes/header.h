@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 14:16:44 2017 theo champion
-** Last update Wed May 17 23:27:34 2017 theo champion
+** Last update Fri May 19 17:00:59 2017 theo champion
 */
 
 #ifndef HEADER_H_
@@ -26,6 +26,7 @@
 #include <stdarg.h>
 #include <dirent.h>
 #include <signal.h>
+#include <libgen.h>
 
 #define CMD_SIZE 1024
 #define BLOCK_SIZE 1024
@@ -47,7 +48,8 @@ typedef struct	s_handle
   int		data_fd;
   int		pasv_fd;
   unsigned long	local_ip;
-  char		*path;
+  char		*home;
+  char		*wd;
   int		cmd_nb;
   char		*cmd_arg;
   int		login_status;
@@ -76,8 +78,9 @@ bool	cmd_port(t_handle *hdl);
 bool	cmd_pasv(t_handle *hdl);
 bool	cmd_type(t_handle *hdl);
 void	log_msg(int mode, const char *fmt, ...);
-FILE	*open_file(char *path, char *filename, char *mode);
-DIR	*open_dir(char *path, char *dirname);
+char	*gen_fullpath(t_handle *hdl, char *path);
+FILE	*open_file(t_handle *hdl, char *filename, char *mode);
+DIR	*open_dir(t_handle *hdl, char *dirname);
 int	create_s_socket(struct sockaddr_in *sock, int port);
 int	create_c_socket(struct sockaddr_in *sock, uint32_t ip, int port);
 int	accept_con(int socket);

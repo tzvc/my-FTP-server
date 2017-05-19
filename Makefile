@@ -5,7 +5,7 @@
 ## Login   <theo.champion@epitech.eu>
 ## 
 ## Started on  Wed May 17 11:35:56 2017 theo champion
-## Last update Wed May 17 11:36:23 2017 theo champion
+## Last update Fri May 19 18:07:14 2017 theo champion
 ##
 
 CC	= gcc
@@ -14,7 +14,7 @@ RM	= rm -f
 
 SRCDIR	= ./src
 
-CFLAGS	+= -W -Wall -Wextra -Werror
+CFLAGS	+= -W -Wall -Wextra -Werror -g3
 CFLAGS	+= -I./includes
 
 NAME	= server

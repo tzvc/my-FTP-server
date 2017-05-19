@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 20:34:44 2017 theo champion
-** Last update Thu May 18 00:35:17 2017 theo champion
+** Last update Fri May 19 19:27:09 2017 theo champion
 */
 
 #include "header.h"
@@ -15,37 +15,32 @@ bool	cmd_cwd(t_handle *hdl)
   char	*new_path;
 
   new_path = NULL;
-  if (access(hdl->cmd_arg, F_OK) != -1)
-    new_path = realpath(hdl->cmd_arg, NULL);
-  if (new_path)
-    {
-      free(hdl->path);
-      hdl->path = new_path;
-      return (reply(hdl, 250, "Directory successfully changed."));
-    }
-  return (reply(hdl, 550, "error: %s", strerror(errno)));
+  if ((new_path = gen_fullpath(hdl, hdl->cmd_arg)) == NULL)
+    return (reply(hdl, 550, "Failed to change directory."));
+  free(hdl->wd);
+  hdl->wd = new_path;
+  return (reply(hdl, 250, "Directory successfully changed."));
 }
 
 bool	cmd_cdup(t_handle *hdl)
 {
-  int	i;
+  char	*new_path;
 
-  i = strlen(hdl->path) - 1;
-  while (hdl->path[i] && hdl->path[i] != '/')
-    i--;
-  if (hdl->path[i + 1])
-    {
-      hdl->path[(i > 0 ? i : i + 1)] = 0;
-      hdl->path = realloc(hdl->path, sizeof(char) * (strlen(hdl->path) + 1));
-      return (reply(hdl, 200, "Directory successfully changed."));
-    }
-  log_msg(INFO, "New path set to \"%s\"\n", hdl->path);
-  return (reply(hdl, 550, "Failed to change directory."));
+  new_path = NULL;
+  if ((new_path = gen_fullpath(hdl, "..")) == NULL)
+    return (reply(hdl, 550, "Failed to change directory."));
+  free(hdl->wd);
+  hdl->wd = new_path;
+  return (reply(hdl, 250, "Directory successfully changed."));
 }
 
-bool	cmd_pwd(t_handle *hdl)
+bool		cmd_pwd(t_handle *hdl)
 {
-  return (reply(hdl, 257, "\"%s\"", hdl->path));
+  size_t	offset;
+
+  offset = strlen(hdl->home);
+  offset += strlen(hdl->wd) == offset ? 0 : 1;
+  return (reply(hdl, 257, "\"/%s\"", hdl->wd + offset));
 }
 
 bool		cmd_list(t_handle *hdl)
@@ -53,7 +48,7 @@ bool		cmd_list(t_handle *hdl)
   DIR		*dir;
   struct dirent	*ep;
 
-  if (!(dir = open_dir(hdl->path, hdl->cmd_arg)))
+  if (!(dir = open_dir(hdl, (hdl->cmd_arg ? hdl->cmd_arg : "."))))
     return (reply(hdl, 500, "Cannot open dir."));
   if (hdl->data_fd > 0)
     reply(hdl, 125, "Data connection already open; transfer starting.");

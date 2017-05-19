@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 16:24:37 2017 theo champion
-** Last update Wed May 17 12:12:16 2017 theo champion
+** Last update Fri May 19 18:30:53 2017 theo champion
 */
 
 #include "header.h"
@@ -26,34 +26,68 @@ void		log_msg(int mode, const char *fmt, ...)
   va_end(ap);
 }
 
-FILE	*open_file(char *path, char *filename, char *mode)
+char	*gen_fullpath(t_handle *hdl, char *path)
 {
   char	*fullpath;
+  char	*resolved;
+
+  if (!path)
+    return (NULL);
+  if (!(fullpath = malloc(sizeof(char) *
+			 strlen(hdl->wd) + strlen(path) + 2)))
+    return (NULL);
+  sprintf(fullpath, "%s/%s", hdl->wd, path);
+  log_msg(INFO, "fullpath is \"%s\"", fullpath);
+  resolved = realpath(fullpath, NULL);
+  log_msg(INFO, "resolved is \"%s\"", resolved);
+  free(fullpath);
+  if (!resolved)
+    return (NULL);
+  if (strlen(resolved) < strlen(hdl->home))
+    {
+      free(resolved);
+      return (strdup(hdl->home));
+    }
+  else
+    return (resolved);
+  return (NULL);
+}
+
+FILE	*open_file(t_handle *hdl, char *filepath, char *mode)
+{
+  char	*fullpath;
+  char	*dirc;
+  char	*basec;
+  char	*dname;
+  char	*bname;
   FILE	*file;
 
-  if (!(fullpath = malloc(sizeof(char) *
-                          strlen(path) + strlen(filename) + 2)))
-    return (NULL);
-  sprintf(fullpath, "%s/%s", path, filename);
-  log_msg(INFO, "File to open is %s", fullpath);
-  file = fopen(fullpath, mode);
+  dirc = strdup(filepath);
+  basec = strdup(filepath);
+  dname = dirname(dirc);
+  bname = basename(basec);
+  file = NULL;
+  if ((fullpath = gen_fullpath(hdl, dname)) != NULL)
+    {
+      fullpath = realloc(fullpath, sizeof(char) *
+                         strlen(fullpath) + strlen(bname) + 2);
+      sprintf(fullpath, "%s/%s", fullpath, bname);
+      file = fopen(fullpath, mode);
+      log_msg(INFO, "File to open is \"%s\"", fullpath);
+    }
   free(fullpath);
+  free(dirc);
+  free(basec);
   return (file);
 }
 
-DIR	*open_dir(char *path, char *dirname)
+DIR	*open_dir(t_handle *hdl, char *dirname)
 {
   char	*fullpath;
   DIR	*dir;
 
-  if (!(fullpath = malloc(sizeof(char) *
-                          strlen(path)
-                          + (dirname ? strlen(dirname) : 1) + 2)))
+  if (!(fullpath = gen_fullpath(hdl, dirname)))
     return (NULL);
-  if (dirname)
-    sprintf(fullpath, "%s/%s", path, dirname);
-  else
-    sprintf(fullpath, "%s/.", path);
   log_msg(INFO, "Dir to open is %s", fullpath);
   dir = opendir(fullpath);
   free(fullpath);
