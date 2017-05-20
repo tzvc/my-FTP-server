@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 20:34:44 2017 theo champion
-** Last update Sat May 20 12:17:03 2017 theo champion
+** Last update Sat May 20 13:26:29 2017 theo champion
 */
 
 #include "header.h"
@@ -52,9 +52,8 @@ bool		cmd_list(t_handle *hdl)
 
   if (!(stream = open_cmd_stream(hdl, (hdl->cmd_arg ? hdl->cmd_arg : "."))))
     return (reply(hdl, 450, "Requested file action not taken."));
-  if (hdl->data_fd > 0)
-    reply(hdl, 125, "Data connection already open; transfer starting.");
-  else
+  reply(hdl, 150, "Here comes the directory listing.");
+  if (hdl->data_fd <= 0)
     {
       reply(hdl, 150, "File status okay; about to open data connection.");
       if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr *)0, 0)) <= 0)
