@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Thu May 11 11:20:45 2017 theo champion
-** Last update Fri May 19 15:17:43 2017 theo champion
+** Last update Sat May 20 12:13:35 2017 theo champion
 */
 
 #include "header.h"
@@ -73,7 +73,7 @@ bool	cmd_dele(t_handle *hdl)
 
   if (!hdl->cmd_arg)
     return (reply(hdl, 501, "Syntax error in parameters or arguments."));
-  if (!(fullpath = gen_fullpath(hdl, hdl->cmd_arg)))
+  if (!(fullpath = resolve_path(hdl, hdl->cmd_arg)))
     return (reply(hdl, 550, "Requested action not taken. File unavailable."));
   if (remove(fullpath) == -1)
     reply(hdl, 500, "Internal error: remove: %s", strerror(errno));

@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 15:40:21 2017 theo champion
-** Last update Wed May 17 22:22:13 2017 theo champion
+** Last update Sat May 20 12:18:52 2017 theo champion
 */
 
 #include "header.h"
@@ -19,7 +19,7 @@ bool			cmd_port(t_handle *hdl)
 
   sscanf(hdl->cmd_arg, "%d,%d,%d,%d,%d,%d",
          &ip[0], &ip[1], &ip[2], &ip[3], &port[0], &port[1]);
-  log_msg(DEBUG, "Parsed infos %d,%d,%d,%d,%d,%d",
+  log_msg(DEBUG, "Parsed infos \"%d,%d,%d,%d,%d,%d\"",
           ip[0], ip[1], ip[2], ip[3], port[0], port[1]);
   sprintf(ip_text, "%d.%d.%d.%d", ip[0], ip[1], ip[2], ip[3]);
   if ((hdl->data_fd = create_c_socket(&data_sock, inet_addr(ip_text),

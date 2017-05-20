@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 14:16:44 2017 theo champion
-** Last update Fri May 19 20:38:04 2017 theo champion
+** Last update Sat May 20 12:15:25 2017 theo champion
 */
 
 #ifndef HEADER_H_
@@ -79,7 +79,7 @@ bool	cmd_port(t_handle *hdl);
 bool	cmd_pasv(t_handle *hdl);
 bool	cmd_type(t_handle *hdl);
 void	log_msg(int mode, const char *fmt, ...);
-char	*gen_fullpath(t_handle *hdl, char *path);
+char	*resolve_path(t_handle *hdl, char *path);
 FILE	*open_file(t_handle *hdl, char *filename, char *mode);
 FILE	*open_cmd_stream(t_handle *hdl, char *arg);
 int	create_s_socket(struct sockaddr_in *sock, int port);

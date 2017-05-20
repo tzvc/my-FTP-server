@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 20:34:44 2017 theo champion
-** Last update Fri May 19 21:02:39 2017 theo champion
+** Last update Sat May 20 12:17:03 2017 theo champion
 */
 
 #include "header.h"
@@ -15,7 +15,7 @@ bool	cmd_cwd(t_handle *hdl)
   char	*new_path;
 
   new_path = NULL;
-  if ((new_path = gen_fullpath(hdl, hdl->cmd_arg)) == NULL)
+  if ((new_path = resolve_path(hdl, hdl->cmd_arg)) == NULL)
     return (reply(hdl, 550, "Failed to change directory."));
   free(hdl->wd);
   hdl->wd = new_path;
@@ -27,7 +27,7 @@ bool	cmd_cdup(t_handle *hdl)
   char	*new_path;
 
   new_path = NULL;
-  if ((new_path = gen_fullpath(hdl, "..")) == NULL)
+  if ((new_path = resolve_path(hdl, "..")) == NULL)
     return (reply(hdl, 550, "Failed to change directory."));
   free(hdl->wd);
   hdl->wd = new_path;

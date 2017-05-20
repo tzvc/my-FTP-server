@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Fri May 19 19:46:47 2017 theo champion
+** Last update Sat May 20 12:38:31 2017 theo champion
 */
 
 #include "header.h"
@@ -55,11 +55,14 @@ static void	recv_and_parse_cmd(t_handle *hdl)
 
 static bool	exec_cmd(t_handle *hdl)
 {
+  if (hdl->cmd_nb < 0)
+    {
+      log_msg(ERROR, "Command not implemented.");
+      return (reply(hdl, 500, "Unknown command."));
+    }
   log_msg(INFO, "Executing \"%s\" \"%s\"",
           g_cmd_list[hdl->cmd_nb], hdl->cmd_arg);
-  if (hdl->cmd_nb < 0)
-    return (reply(hdl, 500, "Unknown command."));
-  else if (hdl->cmd_nb >= 0 && hdl->cmd_nb <= 2)
+  if (hdl->cmd_nb >= 0 && hdl->cmd_nb <= 2)
     return (g_funcs[hdl->cmd_nb](hdl));
   else
     {
