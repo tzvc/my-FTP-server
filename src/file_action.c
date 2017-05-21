@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Thu May 11 11:20:45 2017 theo champion
-** Last update Sun May 21 22:10:45 2017 theo champion
+** Last update Sun May 21 22:56:45 2017 theo champion
 */
 
 #include "header.h"
@@ -29,7 +29,7 @@ bool		cmd_stor(t_handle *hdl)
   reply(hdl, 150, "Opening BINARY mode data connection for %s", hdl->cmd_arg);
   while ((nread = read(hdl->data_fd, buf, BLOCK_SIZE)) > 0)
     if (fwrite(buf, sizeof(char), nread, file) < nread)
-      return (reply(hdl, 426, "Connection closed; transfer aborted."));
+      return (reply(hdl, 426, "Connection closed, transfer aborted."));
   reply(hdl, 226, "Closing data connection.");
   close(hdl->data_fd);
   fclose(file);
@@ -55,7 +55,7 @@ bool		cmd_retr(t_handle *hdl)
   reply(hdl, 150, "Opening BINARY mode data connection for %s", hdl->cmd_arg);
   while ((nread = fread(buf, sizeof(char), BLOCK_SIZE, file)) > 0)
     if (write(hdl->data_fd, buf, nread) == -1)
-      return (reply(hdl, 426, "Connection closed; transfer aborted."));
+      return (reply(hdl, 426, "Connection closed, transfer aborted."));
   reply(hdl, 226, "Closing data connection.");
   close(hdl->data_fd);
   fclose(file);
