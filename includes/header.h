@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 14:16:44 2017 theo champion
-** Last update Sat May 20 12:15:25 2017 theo champion
+** Last update Sun May 21 22:00:41 2017 theo champion
 */
 
 #ifndef HEADER_H_
@@ -19,12 +19,10 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
-#include <stropts.h>
 #include <sys/ioctl.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <stdarg.h>
-#include <dirent.h>
 #include <signal.h>
 #include <libgen.h>
 

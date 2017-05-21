@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Sat May 20 12:38:31 2017 theo champion
+** Last update Sun May 21 22:46:00 2017 theo champion
 */
 
 #include "header.h"
@@ -24,7 +24,7 @@ cmd_ptr	g_funcs[] =
     cmd_list, cmd_dele, cmd_help, cmd_noop, cmd_type
   };
 
-static void	recv_and_parse_cmd(t_handle *hdl)
+static bool	recv_and_parse_cmd(t_handle *hdl)
 {
   char		*raw;
   char		cmd[5];
@@ -37,20 +37,19 @@ static void	recv_and_parse_cmd(t_handle *hdl)
   hdl->cmd_arg = NULL;
   raw = NULL;
   if ((input_stream = fdopen(dup(hdl->ctrl_fd), "r")) == NULL)
-    return;
-  if (getline(&raw, &len, input_stream) == -1)
-    return;
+    return (false);
+  if ((getline(&raw, &len, input_stream) == -1) || strlen(raw) <= 2)
+    return (false);
   fclose(input_stream);
   if ((h = sscanf(raw, "%s %ms\r\n", cmd, &hdl->cmd_arg)) == 0)
-    free(raw);
-  if (h == 0)
-    return;
+    return (true);
   free(raw);
   h = 0;
   while (strcmp(cmd, g_cmd_list[h]) != 0)
     if (++h >= (sizeof(g_cmd_list) / sizeof(g_cmd_list[0])))
-      return;
+      return (true);
   hdl->cmd_nb = h;
+  return (true);
 }
 
 static bool	exec_cmd(t_handle *hdl)
@@ -104,10 +103,12 @@ void		handle_client(t_handle *hdl)
   reply(hdl, 220, "Welcome m8, don't break anything pls.");
   while (!hdl->quit)
     {
-      recv_and_parse_cmd(hdl);
-      exec_cmd(hdl);
-      if (hdl->cmd_arg)
-        free(hdl->cmd_arg);
+      if (recv_and_parse_cmd(hdl))
+        {
+          exec_cmd(hdl);
+          if (hdl->cmd_arg)
+            free(hdl->cmd_arg);
+        }
     }
   free(hdl->home);
   free(hdl->wd);

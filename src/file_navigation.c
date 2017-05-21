@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Wed May 10 20:34:44 2017 theo champion
-** Last update Sat May 20 13:26:29 2017 theo champion
+** Last update Sun May 21 21:19:29 2017 theo champion
 */
 
 #include "header.h"
@@ -54,18 +54,15 @@ bool		cmd_list(t_handle *hdl)
     return (reply(hdl, 450, "Requested file action not taken."));
   reply(hdl, 150, "Here comes the directory listing.");
   if (hdl->data_fd <= 0)
-    {
-      reply(hdl, 150, "File status okay; about to open data connection.");
-      if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr *)0, 0)) <= 0)
-        return (reply(hdl, 425, "Can't open data connection."));
-    }
+    if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr *)0, 0)) <= 0)
+      return (reply(hdl, 425, "Can't open data connection."));
   len = 0;
   line = NULL;
   while ((nread = getline(&line, &len, stream)) != -1)
     write(hdl->data_fd, line, nread);
   free(line);
   pclose(stream);
-  reply(hdl, 226, "Closing data connection.");
+  reply(hdl, 226, "Directory send OK.");
   close(hdl->data_fd);
   hdl->data_fd = -1;
   return (true);

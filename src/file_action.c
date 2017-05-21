@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Thu May 11 11:20:45 2017 theo champion
-** Last update Sat May 20 13:34:59 2017 theo champion
+** Last update Sun May 21 22:10:45 2017 theo champion
 */
 
 #include "header.h"
@@ -21,12 +21,12 @@ bool		cmd_stor(t_handle *hdl)
   if ((file = open_file(hdl, hdl->cmd_arg, "wb")) == NULL)
     return (reply(hdl, 550, "Failed to open file."));
   log_msg(INFO, "File to receive is \"%s\"", hdl->cmd_arg);
-  reply(hdl, 150, "Opening BINARY mode data connection for %s", hdl->cmd_arg);
   if (hdl->data_fd <= 0)
     {
       if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr *)0, 0)) <= 0)
         return (reply(hdl, 425, "Can't open data connection."));
     }
+  reply(hdl, 150, "Opening BINARY mode data connection for %s", hdl->cmd_arg);
   while ((nread = read(hdl->data_fd, buf, BLOCK_SIZE)) > 0)
     if (fwrite(buf, sizeof(char), nread, file) < nread)
       return (reply(hdl, 426, "Connection closed; transfer aborted."));
@@ -47,12 +47,12 @@ bool		cmd_retr(t_handle *hdl)
     return (reply(hdl, 501, "Syntax error in parameters or arguments."));
   if ((file = open_file(hdl, hdl->cmd_arg, "rb")) == NULL)
     return (reply(hdl, 550, "Failed to open file."));
-  reply(hdl, 150, "Opening BINARY mode data connection for %s", hdl->cmd_arg);
   if (hdl->data_fd <= 0)
     {
       if ((hdl->data_fd = accept(hdl->pasv_fd, (struct sockaddr *)0, 0)) <= 0)
         return (reply(hdl, 425, "Can't open data connection."));
     }
+  reply(hdl, 150, "Opening BINARY mode data connection for %s", hdl->cmd_arg);
   while ((nread = fread(buf, sizeof(char), BLOCK_SIZE, file)) > 0)
     if (write(hdl->data_fd, buf, nread) == -1)
       return (reply(hdl, 426, "Connection closed; transfer aborted."));
