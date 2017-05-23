@@ -5,7 +5,7 @@
 ** Login   <theo.champion@epitech.eu>
 ** 
 ** Started on  Tue May  9 15:12:44 2017 theo champion
-** Last update Sun May 21 22:46:00 2017 theo champion
+** Last update Tue May 23 10:58:49 2017 theo champion
 */
 
 #include "header.h"
@@ -43,7 +43,6 @@ static bool	recv_and_parse_cmd(t_handle *hdl)
   fclose(input_stream);
   if ((h = sscanf(raw, "%s %ms\r\n", cmd, &hdl->cmd_arg)) == 0)
     return (true);
-  free(raw);
   h = 0;
   while (strcmp(cmd, g_cmd_list[h]) != 0)
     if (++h >= (sizeof(g_cmd_list) / sizeof(g_cmd_list[0])))
